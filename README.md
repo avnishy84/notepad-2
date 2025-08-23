@@ -20,3 +20,42 @@ Perfect for quick note-taking, accessible from any device.
 ---
 
 ## 📂 Project Structure
+
+---
+
+## 🛠 How to Use
+1. Open the [Live Demo link](https://avnishy84.github.io/notepad-2/).
+2. Start typing your notes in the editor.
+3. Notes are automatically saved in your browser.
+4. Access the app anytime on any device with the same URL.
+
+---
+
+## ⚡ Local Development
+If you want to run it locally:
+```bash
+# Clone the repository
+git clone https://github.com/avnishy84/notepad-2.git
+
+# Open the folder
+cd notepad-2
+
+# Open the app in your browser
+start index.html   # Windows
+open index.html    # macOS
+
+📜 License
+
+This project is licensed under the MIT License — free to use, modify, and share.
+
+🤝 Contributing
+
+Pull requests are welcome!
+If you'd like to improve the app, just fork the repo and submit a PR.
+
+👨‍💻 Author
+
+Avnish Yadav
+GitHub Profile
+
+
