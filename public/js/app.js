@@ -21,20 +21,58 @@ function renderTabs() {
         nameSpan.onclick = () => switchNote(name);
         tab.appendChild(nameSpan);
 
-        // Close button
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'close-btn';
-        closeBtn.textContent = '❌';
-        closeBtn.onclick = (e) => {
+        // Close span
+        const closeSpan = document.createElement('span');
+        closeSpan.className = 'close-btn cursor-pointer subscript';
+        closeSpan.textContent = 'X';
+        closeSpan.onclick = (e) => {
             e.stopPropagation();
             closeNote(name);
         };
-        tab.appendChild(closeBtn);
+        tab.appendChild(closeSpan);
 
         tabsContainer.appendChild(tab);
     });
+    const addBtn = document.createElement('button');
+    addBtn.className = 'tab add-btn';
+    addBtn.textContent = '+';
+    addBtn.onclick = () => newNoteBtn.click();
+    tabsContainer.appendChild(addBtn);
 }
+function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+function linkMobileButtons() {
+    const mappings = [
+        { mobile: "darkToggleMobile", desktop: "darkToggle" },
+        { mobile: "downloadBtnMobile", desktop: "downloadBtn" },
+        { mobile: "newNoteBtnMobile", desktop: "newNoteBtn" },
+    ];
 
+    mappings.forEach(({ mobile, desktop }) => {
+        const mobileBtn = document.getElementById(mobile);
+        const desktopBtn = document.getElementById(desktop);
+
+        if (mobileBtn && desktopBtn) {
+            mobileBtn.addEventListener("click", () => {
+                desktopBtn.click();   // trigger same logic
+                toggleMenu();         // close menu after click
+            });
+        }
+    });
+}
+// Run when page is loaded
+window.addEventListener("DOMContentLoaded", linkMobileButtons);
+
+// Close menu when clicking outside
+document.addEventListener("click", (e) => {
+    const menu = document.getElementById("menu");
+    const hamburger = document.querySelector(".hamburger");
+    if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        menu.style.display = "none";
+    }
+});
 // Switch between notes
 function switchNote(name) {
     notes[currentNote] = editor.value;
@@ -74,10 +112,18 @@ function updateStatus() {
     status.textContent = `Words: ${words} | Chars: ${chars}`;
 }
 
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark');
+    darkToggle.textContent = '🌙'; // show sun for light mode option
+} else {
+    darkToggle.textContent = '☀️'; // show moon for dark mode option
+}
+
 // Dark mode toggle
 darkToggle.onclick = () => {
-    document.body.classList.toggle('dark');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+    const isDark = document.body.classList.toggle('dark');
+    localStorage.setItem('darkMode', isDark);
+    darkToggle.textContent = isDark ? '🌙' : '☀️';
 };
 
 // Download note

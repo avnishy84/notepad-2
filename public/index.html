@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,16 +8,33 @@
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
+
 <body>
   <!-- Header with tabs and buttons -->
   <header>
-    <div id="tabs"></div>
-    <div>
+    <!-- Tabs section -->
+    <div id="tabs">
+      <!-- Tabs will render here -->
+    </div>
+    <!-- New Note button placed next to tabs -->
+    <button id="newNoteBtn" class="tab-new"></button>
+
+    <!-- Actions (theme + download) -->
+    <div class="actions">
       <button id="darkToggle">🌙</button>
       <button id="downloadBtn">⬇️ Download</button>
-      <button id="newNoteBtn">➕ New Note</button>
+    </div>
+
+    <!-- Hamburger for mobile -->
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+
+    <!-- Dropdown menu for mobile -->
+    <div class="menu" id="menu">
+      <button id="darkToggleMobile">🌙</button>
+      <button id="downloadBtnMobile">⬇️ Download</button>
     </div>
   </header>
+
 
   <!-- Text editor -->
   <textarea id="editor" placeholder="Start typing..."></textarea>
@@ -24,6 +42,13 @@
   <!-- Footer with status -->
   <footer>
     <span id="status">Words: 0 | Chars: 0</span>
+    <!-- Credits -->
+    <div class="mt-2 md:mt-0">
+      Made with ❤️ by Avnish
+      </a>
+    </div>
+
+
   </footer>
 
   <!-- Core app logic -->
@@ -35,4 +60,5 @@
   <!-- Cloud sync logic (optional, only if using Firestore) -->
   <script type="module" src="js/sync.js"></script>
 </body>
+
 </html>
