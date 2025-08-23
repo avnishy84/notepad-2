@@ -20,7 +20,12 @@ Perfect for quick note-taking, accessible from any device.
 ---
 
 ## 📂 Project Structure
-
+notepad-2/
+│
+├── index.html # Main app interface
+├── style.css # Styles for the app
+├── script.js # Core logic for note management
+└── README.md # Project documentation
 ---
 
 ## 🛠 How to Use
