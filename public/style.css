@@ -45,26 +45,52 @@ header {
   gap: 6px;
   flex-wrap: wrap;
 }
-
 .tab {
-  padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.05); /* frosted transparency */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
   font-size: 14px;
   color: var(--text);
   cursor: pointer;
-  transition: background 0.2s ease;
   display: flex;
   align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* classy soft shadow */
+  box-shadow: 
+    2px 2px 6px rgba(0,0,0,0.4),
+    -2px -2px 6px rgba(255,255,255,0.1) inset;
 }
 
-body.dark .tab {
-  background: rgba(255, 255, 255, 0.1);
+.tab:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 
+    3px 3px 10px rgba(0,0,0,0.5),
+    -2px -2px 6px rgba(255,255,255,0.15) inset;
 }
 
 .tab.active {
-  background: var(--accent);
+  background: rgba(74, 144, 226, 0.2); /* transparent blue glass */
+  border: 1px solid rgba(74, 144, 226, 0.4);
+  color: #fff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  /* Glow effect */
+  box-shadow: 
+    0 0 12px rgba(74, 144, 226, 0.7),  /* outer glow */
+    inset 0 0 6px rgba(255, 255, 255, 0.2); /* inner highlight */
+
+  transform: translateY(-1px); /* subtle lift */
+  transition: all 0.3s ease;
 }
+
 
 /* ---- CLOSE BUTTON ---- */
 .close-btn {
@@ -82,26 +108,47 @@ body.dark .tab {
 
 /* ---- BUTTONS ---- */
 button {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.05); /* subtle transparency */
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--text);
-  padding: 6px 14px;
+  padding: 5px 10px;
   font-size: 14px;
-  border-radius: 8px;
+  font-weight: 500;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: var(--bg-blur);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  /* Classy soft shadow */
+  box-shadow: 
+    2px 2px 6px rgba(0,0,0,0.4),
+    -2px -2px 6px rgba(255,255,255,0.1) inset;
 }
+
+button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px); /* slight lift */
+  box-shadow: 
+    4px 4px 12px rgba(0,0,0,0.5),
+    -2px -2px 6px rgba(255,255,255,0.15) inset;
+}
+
+button:active {
+  transform: translateY(0); /* press effect */
+  box-shadow: 
+    inset 2px 2px 6px rgba(0,0,0,0.5),
+    inset -2px -2px 6px rgba(255,255,255,0.1);
+}
+
+
 
 body.dark button {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-button:hover {
-  background: var(--accent);
-  border-color: var(--accent-hover);
-}
 
 /* ---- TEXTAREA ---- */
 textarea {
@@ -155,7 +202,7 @@ header {
   font-size: 22px;
   background: none;
   border: none;
-  color: white;
+  color: var(--text);
   cursor: pointer;
 }
 
@@ -182,7 +229,7 @@ header {
   margin: 5px 0;
   padding: 8px 12px;
   background: #333;
-  color: white;
+  color: var(--text);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -210,7 +257,9 @@ header {
   padding: 4px 10px;
   border: 1px solid #444;
 }
-
+body.dark tab {
+color: var(--text);
+}
 .tab.add-btn:hover {
   background: #333;
 }
