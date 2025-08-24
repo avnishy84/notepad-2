@@ -39,45 +39,12 @@ function renderTabs() {
     addBtn.onclick = () => newNoteBtn.click();
     tabsContainer.appendChild(addBtn);
 }
-function toggleMenu() {
-    const menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
-function linkMobileButtons() {
-    const mappings = [
-        { mobile: "darkToggleMobile", desktop: "darkToggle" },
-        { mobile: "downloadBtnMobile", desktop: "downloadBtn" },
-        { mobile: "newNoteBtnMobile", desktop: "newNoteBtn" },
-    ];
 
-    mappings.forEach(({ mobile, desktop }) => {
-        const mobileBtn = document.getElementById(mobile);
-        const desktopBtn = document.getElementById(desktop);
-
-        if (mobileBtn && desktopBtn) {
-            mobileBtn.addEventListener("click", () => {
-                desktopBtn.click();   // trigger same logic
-                toggleMenu();         // close menu after click
-            });
-        }
-    });
-}
-// Run when page is loaded
-window.addEventListener("DOMContentLoaded", linkMobileButtons);
-
-// Close menu when clicking outside
-document.addEventListener("click", (e) => {
-    const menu = document.getElementById("menu");
-    const hamburger = document.querySelector(".hamburger");
-    if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
-        menu.style.display = "none";
-    }
-});
 // Switch between notes
 function switchNote(name) {
-    notes[currentNote] = editor.value;
+    notes[currentNote] = editor.innerHTML;  // save old note
     currentNote = name;
-    editor.value = notes[name];
+    editor.innerHTML = notes[name];         // load new note
     updateStatus();
     renderTabs();
     saveNotes();
@@ -92,7 +59,7 @@ function closeNote(name) {
     delete notes[name];
     if (currentNote === name) {
         currentNote = Object.keys(notes)[0];
-        editor.value = notes[currentNote];
+        editor.innerHTML = notes[currentNote];
     }
     updateStatus();
     renderTabs();
@@ -106,20 +73,19 @@ function saveNotes() {
 
 // Update word/char count
 function updateStatus() {
-    const text = editor.value.trim();
+    const text = editor.innerText.trim();
     const words = text ? text.split(/\s+/).length : 0;
     const chars = text.length;
     status.textContent = `Words: ${words} | Chars: ${chars}`;
 }
 
+// Dark mode toggle
 if (localStorage.getItem('darkMode') === 'true') {
     document.body.classList.add('dark');
-    darkToggle.textContent = '🌙'; // show sun for light mode option
+    darkToggle.textContent = '🌙';
 } else {
-    darkToggle.textContent = '☀️'; // show moon for dark mode option
+    darkToggle.textContent = '☀️';
 }
-
-// Dark mode toggle
 darkToggle.onclick = () => {
     const isDark = document.body.classList.toggle('dark');
     localStorage.setItem('darkMode', isDark);
@@ -128,35 +94,67 @@ darkToggle.onclick = () => {
 
 // Download note
 downloadBtn.onclick = () => {
-    const blob = new Blob([editor.value], { type: 'text/plain' });
+    const blob = new Blob([editor.innerHTML], { type: 'text/html' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = currentNote + '.txt';
+    link.download = currentNote + '.html';
     link.click();
 };
 
 // Add new note
 newNoteBtn.onclick = () => {
-    const name = prompt('Enter note name:', `Note ${Object.keys(notes).length + 1}`);
-    if (name && !notes[name]) {
+    const now = new Date();
+    const pad = (num) => num.toString().padStart(2, '0');
+    const name = `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    if (!notes[name]) {
         notes[name] = '';
         switchNote(name);
     } else {
-        alert('Invalid or duplicate note name.');
+        alert('Duplicate note name. Try again.');
     }
 };
 
-// Save text changes
-editor.addEventListener('input', () => {
-    notes[currentNote] = editor.value;
-    updateStatus();
+// Save changes on typing
+editor.addEventListener("input", () => {
+    notes[currentNote] = editor.innerHTML;
     saveNotes();
+    updateStatus();
 });
+
+// Placeholder support for contenteditable
+const observer = new MutationObserver(updateStatus);
+observer.observe(editor, { childList: true, characterData: true, subtree: true });
 
 // Initialize
 renderTabs();
-editor.value = notes[currentNote];
+editor.innerHTML = notes[currentNote];
 updateStatus();
-if (localStorage.getItem('darkMode') === 'true') {
-    document.body.classList.add('dark');
+
+// Formatting
+function formatText(command, value = null) {
+    document.execCommand(command, false, value);
+    editor.focus();
 }
+function clearFormatting() {
+    document.execCommand('removeFormat', false, null);
+    editor.focus();
+}
+
+// Shortcuts (same as your code, unchanged)
+document.addEventListener("keydown", function (e) {
+    const ctrl = e.ctrlKey || e.metaKey;
+
+    if (ctrl) {
+        switch (e.key.toLowerCase()) {
+            case "b": e.preventDefault(); document.execCommand("bold"); break;
+            case "i": e.preventDefault(); document.execCommand("italic"); break;
+            case "u": e.preventDefault(); document.execCommand("underline"); break;
+            case "z": e.preventDefault(); document.execCommand(e.shiftKey ? "redo" : "undo"); break;
+            case "7": if (e.shiftKey) { e.preventDefault(); document.execCommand("insertOrderedList"); } break;
+            case "8": if (e.shiftKey) { e.preventDefault(); document.execCommand("insertUnorderedList"); } break;
+            case "1": if (e.altKey) { e.preventDefault(); document.execCommand("formatBlock", false, "h1"); } break;
+            case "2": if (e.altKey) { e.preventDefault(); document.execCommand("formatBlock", false, "h2"); } break;
+            case "\\": e.preventDefault(); document.execCommand("removeFormat"); document.execCommand("formatBlock", false, "p"); break;
+        }
+    }
+});

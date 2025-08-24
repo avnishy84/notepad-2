@@ -151,7 +151,7 @@ body.dark button {
 
 
 /* ---- TEXTAREA ---- */
-textarea {
+/* textarea {
   flex: 1;
   padding: 15px;
   font-size: 16px;
@@ -163,11 +163,11 @@ textarea {
   resize: none;
   outline: none;
   backdrop-filter: var(--bg-blur);
-}
+} */
 
-body.dark textarea {
+/* body.dark textarea {
   background: rgba(255, 255, 255, 0.05);
-}
+} */
 
 /* ---- FOOTER ---- */
 footer {
@@ -284,4 +284,80 @@ color: var(--text);
 }
 #newNoteBtn {
   display: none;
+}
+
+.editor {
+  overflow-y: auto;
+  font-family: sans-serif;
+  white-space: pre-wrap;
+  flex: 1;
+  padding: 15px;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 10px;
+  margin: 10px;
+  color: var(--text);
+  resize: none;
+  outline: none;
+  backdrop-filter: var(--bg-blur);
+}
+
+body.dark .editor {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.editor:empty:before {
+  content: attr(placeholder);
+  color: #aaa;
+  pointer-events: none;
+}
+
+
+
+/* Toolbar container */
+#toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: #1e1e1e; /* Dark background */
+  border-bottom: 1px solid #333;
+}
+
+/* Modern button styling */
+#toolbar button {
+  background: #2a2a2a;
+  color: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+
+/* Hover effect */
+#toolbar button:hover {
+  background: #3b3b3b;
+  transform: translateY(-1px);
+}
+
+/* Active/pressed effect */
+#toolbar button:active {
+  background: #555;
+  transform: scale(0.97);
+}
+
+/* Special highlight for Clear button */
+#toolbar button:last-child {
+  background: #ff4d4d;
+  color: white;
+}
+
+#toolbar button:last-child:hover {
+  background: #ff6666;
 }

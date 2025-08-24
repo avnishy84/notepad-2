@@ -34,10 +34,20 @@
       <button id="downloadBtnMobile">⬇️ Download</button>
     </div>
   </header>
+<div id="toolbar">
+  <button onclick="formatText('bold')"><b>B</b></button>
+  <button onclick="formatText('italic')"><i>I</i></button>
+  <button onclick="formatText('underline')"><u>U</u></button>
+  <button onclick="formatText('insertOrderedList')">1.</button>
+  <button onclick="formatText('insertUnorderedList')">•</button>
+  <button onclick="formatText('formatBlock', 'h1')">H1</button>
+  <button onclick="formatText('formatBlock', 'h2')">H2</button>
+  <button onclick="clearFormatting()">Clear</button>
+</div>
 
 
   <!-- Text editor -->
-  <textarea id="editor" placeholder="Start typing..."></textarea>
+<div id="editor" contenteditable="true" class="editor textarea" placeholder="Start typing..."></div>
 
   <!-- Footer with status -->
   <footer>
