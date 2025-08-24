@@ -62,6 +62,36 @@ function switchNote(name) {
     saveNotes();
 }
 
+function linkMobileButtons() {
+    const mappings = [
+        { mobile: "darkToggleMobile", desktop: "darkToggle" },
+        { mobile: "downloadBtnMobile", desktop: "downloadBtn" },
+        { mobile: "newNoteBtnMobile", desktop: "newNoteBtn" },
+    ];
+
+    mappings.forEach(({ mobile, desktop }) => {
+        const mobileBtn = document.getElementById(mobile);
+        const desktopBtn = document.getElementById(desktop);
+
+        if (mobileBtn && desktopBtn) {
+            mobileBtn.addEventListener("click", () => {
+                desktopBtn.click();   // trigger same logic
+                toggleMenu();         // close menu after click
+            });
+        }
+    });
+}
+// Run when page is loaded
+window.addEventListener("DOMContentLoaded", linkMobileButtons);
+
+// Close menu when clicking outside
+document.addEventListener("click", (e) => {
+    const menu = document.getElementById("menu");
+    const hamburger = document.querySelector(".hamburger");
+    if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        menu.style.display = "none";
+    }
+});
 function closeNote(name) {
     if (Object.keys(notes).length === 1) {
         alert("You can't close the last note!");
@@ -232,3 +262,16 @@ onAuthStateChanged(auth, (user) => {
         console.log("No user logged in");
     }
 });
+
+    function openModal(id) {
+      document.getElementById(id).style.display = "flex";
+    }
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+    window.onclick = function (event) {
+      const loginModal = document.getElementById("loginPopup");
+      const signupModal = document.getElementById("signupPopup");
+      if (event.target === loginModal) loginModal.style.display = "none";
+      if (event.target === signupModal) signupModal.style.display = "none";
+    }

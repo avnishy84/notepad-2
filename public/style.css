@@ -45,9 +45,11 @@ header {
   gap: 6px;
   flex-wrap: wrap;
 }
+
 .tab {
   padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.05); /* frosted transparency */
+  background: rgba(255, 255, 255, 0.05);
+  /* frosted transparency */
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   font-size: 14px;
@@ -61,33 +63,37 @@ header {
   -webkit-backdrop-filter: blur(10px);
 
   /* classy soft shadow */
-  box-shadow: 
-    2px 2px 6px rgba(0,0,0,0.4),
-    -2px -2px 6px rgba(255,255,255,0.1) inset;
+  box-shadow:
+    2px 2px 6px rgba(0, 0, 0, 0.4),
+    -2px -2px 6px rgba(255, 255, 255, 0.1) inset;
 }
 
 .tab:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
-  box-shadow: 
-    3px 3px 10px rgba(0,0,0,0.5),
-    -2px -2px 6px rgba(255,255,255,0.15) inset;
+  box-shadow:
+    3px 3px 10px rgba(0, 0, 0, 0.5),
+    -2px -2px 6px rgba(255, 255, 255, 0.15) inset;
 }
 
 .tab.active {
-  background: rgba(74, 144, 226, 0.2); /* transparent blue glass */
+  background: rgba(74, 144, 226, 0.2);
+  /* transparent blue glass */
   border: 1px solid rgba(74, 144, 226, 0.4);
   color: #fff;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
   /* Glow effect */
-  box-shadow: 
-    0 0 12px rgba(74, 144, 226, 0.7),  /* outer glow */
-    inset 0 0 6px rgba(255, 255, 255, 0.2); /* inner highlight */
+  box-shadow:
+    0 0 12px rgba(74, 144, 226, 0.7),
+    /* outer glow */
+    inset 0 0 6px rgba(255, 255, 255, 0.2);
+  /* inner highlight */
 
-  transform: translateY(-1px); /* subtle lift */
+  transform: translateY(-1px);
+  /* subtle lift */
   transition: all 0.3s ease;
 }
 
@@ -108,10 +114,10 @@ header {
 
 /* ---- BUTTONS ---- */
 button {
-  background: rgba(255, 255, 255, 0.05); /* subtle transparency */
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--text);
-  padding: 5px 10px;
+  color: #fff;
+  padding: 6px 12px;
   font-size: 14px;
   font-weight: 500;
   border-radius: 6px;
@@ -121,33 +127,39 @@ button {
   -webkit-backdrop-filter: blur(12px);
 
   /* Classy soft shadow */
-  box-shadow: 
-    2px 2px 6px rgba(0,0,0,0.4),
-    -2px -2px 6px rgba(255,255,255,0.1) inset;
+  box-shadow:
+    2px 2px 6px rgba(0, 0, 0, 0.15),
+    -2px -2px 6px rgba(255, 255, 255, 0.4) inset;
 }
 
 button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px); /* slight lift */
-  box-shadow: 
-    4px 4px 12px rgba(0,0,0,0.5),
-    -2px -2px 6px rgba(255,255,255,0.15) inset;
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  /* slight lift */
+  box-shadow:
+    4px 4px 12px rgba(0, 0, 0, 0.2),
+    -2px -2px 6px rgba(255, 255, 255, 0.3) inset;
 }
 
 button:active {
-  transform: translateY(0); /* press effect */
-  box-shadow: 
-    inset 2px 2px 6px rgba(0,0,0,0.5),
-    inset -2px -2px 6px rgba(255,255,255,0.1);
+  transform: translateY(0);
+  box-shadow:
+    inset 2px 2px 6px rgba(0, 0, 0, 0.25),
+    inset -2px -2px 6px rgba(255, 255, 255, 0.2);
 }
 
+/* DARK MODE BUTTONS */
 
-
-body.dark button {
+/* body.dark button {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
+
+body.dark button:hover {
+  background: rgba(255, 255, 255, 0.2);
+} */
 
 
 /* ---- TEXTAREA ---- */
@@ -253,15 +265,25 @@ header {
 }
 
 .tab.add-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
   cursor: pointer;
   padding: 4px 10px;
   border: 1px solid #444;
+  box-shadow:
+    2px 2px 6px rgba(0, 0, 0, 0.15),
+    -2px -2px 6px rgba(255, 255, 255, 0.4) inset;
 }
-body.dark tab {
-color: var(--text);
-}
+
+/* body.dark .add-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+} */
+
 .tab.add-btn:hover {
-  background: #333;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .subscript {
@@ -282,6 +304,7 @@ color: var(--text);
   text-shadow: 0 0 8px rgba(245, 223, 223, 0.9),
     0 0 12px rgba(245, 223, 223, 0.9);
 }
+
 #newNoteBtn {
   display: none;
 }
@@ -321,7 +344,8 @@ body.dark .editor {
   display: flex;
   gap: 8px;
   padding: 10px;
-  background: #1e1e1e; /* Dark background */
+  background: #1e1e1e;
+  /* Dark background */
   border-bottom: 1px solid #333;
 }
 
@@ -337,7 +361,7 @@ body.dark .editor {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 /* Hover effect */
@@ -360,4 +384,62 @@ body.dark .editor {
 
 #toolbar button:last-child:hover {
   background: #ff6666;
+}
+
+/* Popup modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 300px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-content button {
+  padding: 8px 16px;
+  margin-top: 10px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background: #0056b3;
+}
+
+.popup-close-btn {
+  float: right;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
+}
+
+.popup-close-btn:hover {
+  color: red;
 }
