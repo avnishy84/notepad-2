@@ -62,14 +62,24 @@
 
   <!-- Login Modal -->
   <div id="loginPopup" class="modal">
-    <div class="modal-content">
+    <div class="modal-content auth-box">
       <span class="popup-close-btn" onclick="closeModal('loginPopup')">&times;</span>
-      <h3>Login</h3>
-      <input id="loginEmail" type="email" placeholder="Email" />
-      <input id="loginPassword" type="password" placeholder="Password" />
-      <button onclick="login()">Login</button>
+      <h2 class="auth-title">Welcome Back 👋</h2>
+
+      <input type="email" id="loginEmail" placeholder="Email" class="auth-input" />
+      <input type="password" id="loginPassword" placeholder="Password" class="auth-input" />
+
+      <button class="auth-btn" onclick="login()">Login</button>
+
+      <div class="auth-divider"><span>or</span></div>
+
+      <button class="google-btn" onclick="googleLogin()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+        Continue with Google
+      </button>
     </div>
   </div>
+
 
   <!-- Signup Modal -->
   <div id="signupPopup" class="modal">

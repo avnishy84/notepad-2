@@ -11,7 +11,8 @@ import {
     getDoc,
     setDoc
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
+import { GoogleAuthProvider, signInWithPopup } 
+  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 const editor = document.getElementById('editor');
 const darkToggle = document.getElementById('darkToggle');
 const downloadBtn = document.getElementById('downloadBtn');
@@ -21,6 +22,7 @@ const status = document.getElementById('status');
 
 let notes = { "Note 1": "" };
 let currentNote = Object.keys(notes)[0];
+const provider = new GoogleAuthProvider();
 
 // ---------------- Tabs ----------------
 function renderTabs() {
@@ -304,3 +306,14 @@ onAuthStateChanged(auth, (user) => {
       if (event.target === loginModal) loginModal.style.display = "none";
       if (event.target === signupModal) signupModal.style.display = "none";
     }
+    window.googleLogin = async function () {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        console.log("Google login success:", user.email);
+        closeModal("loginPopup"); // auto close popup
+    } catch (err) {
+        alert("Google login failed: " + err.message);
+        console.error(err);
+    }
+};

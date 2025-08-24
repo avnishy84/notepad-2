@@ -443,3 +443,113 @@ body.dark .editor {
 .popup-close-btn:hover {
   color: red;
 }
+.auth-box {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 28px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.3s ease;
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  outline: none;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease-in-out;
+}
+
+.auth-input:focus {
+  border-color: #4facfe;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.auth-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(79, 172, 254, 0.6);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+}
+
+.auth-divider span {
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 0 10px;
+  color: #ccc;
+  font-size: 13px;
+}
+
+.google-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.google-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+.google-btn img {
+  width: 20px;
+  height: 20px;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
