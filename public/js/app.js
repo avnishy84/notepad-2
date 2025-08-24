@@ -110,26 +110,47 @@ function closeNote(name) {
 // ---------------- Save / Load ----------------
 async function saveNotes() {
     if (!auth.currentUser) return;
-    await setDoc(doc(db, "users", auth.currentUser.uid), {
-        notes: notes
-    });
+    try {
+        await setDoc(doc(db, "users", auth.currentUser.uid), {
+            notes: notes
+        }, { merge: true }); // merge to avoid overwriting user doc
+        console.log("Notes saved for", auth.currentUser.email);
+    } catch (err) {
+        console.error("Error saving notes:", err);
+    }
 }
 
 async function loadNotes(uid) {
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
+    try {
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-        notes = docSnap.data().notes;
-        currentNote = Object.keys(notes)[0];
-        editor.innerHTML = notes[currentNote];
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.notes && Object.keys(data.notes).length > 0) {
+                notes = data.notes;
+                currentNote = Object.keys(notes)[0];
+                editor.innerHTML = notes[currentNote];
+                console.log("Notes loaded for", uid);
+            } else {
+                // No notes stored → create default
+                notes = { "Note 1": "" };
+                currentNote = "Note 1";
+                await saveNotes();
+                console.log("New user – default note created");
+            }
+        } else {
+            // First time user doc → create with default note
+            notes = { "Note 1": "" };
+            currentNote = "Note 1";
+            await saveNotes();
+            console.log("New user – doc created");
+        }
+
         renderTabs();
         updateStatus();
-    } else {
-        notes = { "Note 1": "" };
-        currentNote = "Note 1";
-        await saveNotes();
-        renderTabs();
+    } catch (err) {
+        console.error("Error loading notes:", err);
     }
 }
 
@@ -255,11 +276,19 @@ onAuthStateChanged(auth, (user) => {
         document.getElementById("authButtons").style.display = "none";
         document.getElementById("logoutSection").style.display = "block";
         console.log("User logged in:", user.email);
-        // loadNotes(user.uid);  // Only if you have notes sync
+
+        loadNotes(user.uid); // ✅ fetch notes when logged in
     } else {
         document.getElementById("authButtons").style.display = "block";
         document.getElementById("logoutSection").style.display = "none";
         console.log("No user logged in");
+
+        // Reset local notes when logged out
+        notes = { "Note 1": "" };
+        currentNote = "Note 1";
+        editor.innerHTML = notes[currentNote];
+        renderTabs();
+        updateStatus();
     }
 });
 
