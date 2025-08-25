@@ -65,35 +65,60 @@ function switchNote(name) {
 }
 
 function linkMobileButtons() {
-    const mappings = [
-        { mobile: "darkToggleMobile", desktop: "darkToggle" },
-        { mobile: "downloadBtnMobile", desktop: "downloadBtn" },
-        { mobile: "newNoteBtnMobile", desktop: "newNoteBtn" },
-    ];
-
-    mappings.forEach(({ mobile, desktop }) => {
-        const mobileBtn = document.getElementById(mobile);
-        const desktopBtn = document.getElementById(desktop);
-
-        if (mobileBtn && desktopBtn) {
-            mobileBtn.addEventListener("click", () => {
-                desktopBtn.click();   // trigger same logic
-                toggleMenu();         // close menu after click
-            });
-        }
+  // Link new note button
+  const newNoteBtnMobile = document.getElementById("newNoteBtnMobile");
+  if (newNoteBtnMobile) {
+    newNoteBtnMobile.addEventListener("click", () => {
+      newNoteBtn.click();
+      toggleMenu();
     });
+  }
+
+  // Link dark mode toggle
+  const darkToggleMobile = document.getElementById("darkToggleMobile");
+  if (darkToggleMobile) {
+    darkToggleMobile.addEventListener("click", () => {
+      darkToggle.click();
+    });
+  }
+
+  // Link download button
+  const downloadBtnMobile = document.getElementById("downloadBtnMobile");
+  if (downloadBtnMobile) {
+    downloadBtnMobile.addEventListener("click", () => {
+      downloadBtn.click();
+      toggleMenu();
+    });
+  }
+
+  // Link logout button
+  const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+  if (logoutBtnMobile) {
+    logoutBtnMobile.addEventListener("click", () => {
+      logout();
+      toggleMenu();
+    });
+  }
 }
 // Run when page is loaded
-window.addEventListener("DOMContentLoaded", linkMobileButtons);
-
+// Run when page is loaded
+window.addEventListener("DOMContentLoaded", function() {
+  linkMobileButtons();
+  renderTabs();
+  editor.innerHTML = notes[currentNote];
+  updateStatus();
+});
 // Close menu when clicking outside
 document.addEventListener("click", (e) => {
     const menu = document.getElementById("menu");
     const hamburger = document.querySelector(".hamburger");
-    if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
-        menu.style.display = "none";
+
+    if ((menu && !menu.contains(e.target)) &&
+        (hamburger && !hamburger.contains(e.target))) {
+        if (menu) menu.style.display = "none";
     }
 });
+
 function closeNote(name) {
     if (Object.keys(notes).length === 1) {
         alert("You can't close the last note!");
@@ -317,3 +342,21 @@ onAuthStateChanged(auth, (user) => {
         console.error(err);
     }
 };
+// expose for mobile menu
+window.notes = notes;
+window.openNote = openNote;
+function openNote(noteName) {
+  // Save current note content before switching
+  notes[currentNote] = editor.innerHTML;
+  
+  // Switch to the selected note
+  currentNote = noteName;
+  editor.innerHTML = notes[noteName] || "";
+  
+  // Update UI
+  updateStatus();
+  renderTabs();
+  saveNotes();
+  
+  console.log("Opened note:", noteName);
+}

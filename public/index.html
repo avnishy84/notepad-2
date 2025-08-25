@@ -25,7 +25,6 @@
     </div>
 
     <div id="tabs"></div>
-    <button id="newNoteBtn" class="tab-new"></button>
 
     <div class="actions">
       <button id="darkToggle">🌙</button>
@@ -33,10 +32,29 @@
     </div>
 
     <button class="hamburger" onclick="toggleMenu()">☰</button>
-    <div class="menu" id="menu">
-      <button id="darkToggleMobile">🌙</button>
-      <button id="downloadBtnMobile">⬇️ Download</button>
+    <!-- Side Panel (Mobile Drawer) -->
+    <!-- Replace the existing side panel with this improved version -->
+    <div id="sidePanel" class="side-panel">
+      <div class="side-panel-content">
+        <button id="closePanelBtn" class="close-panel">✖</button>
+        <button id="newNoteBtn" class="tab-new">+ New Note</button>
+        <h3 class="panel-title">Your Documents</h3>
+        <ul id="mobileDocList" class="doc-list"></ul>
+
+        <!-- Move/copy existing buttons here dynamically -->
+        <div id="sidePanelButtons"></div>
+      </div>
+
+      <!-- Bottom actions section -->
+      <div class="side-panel-bottom-actions">
+        <div class="bottom-actions-container">
+          <button id="darkToggleMobile">🌙</button>
+          <button id="downloadBtnMobile">⬇️ Download</button>
+          <button id="logoutBtnMobile">Logout</button>
+        </div>
+      </div>
     </div>
+
   </header>
 
   <!-- Toolbar -->
@@ -99,9 +117,84 @@
 
   <!-- Modal script -->
   <script>
+    const sidePanel = document.getElementById("sidePanel");
+    const panelButtons = document.getElementById("sidePanelButtons");
+    const header = document.querySelector("header"); // original parent
+
+    const elementsToMove = [
+      document.getElementById("authButtons"),
+      document.getElementById("logoutSection"),
+      document.getElementById("tabs"),
+      document.getElementById("newNoteBtn"),
+      document.querySelector(".actions"),
+    ];
+
     function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+      const sidePanel = document.getElementById("sidePanel");
+      sidePanel.classList.toggle("open");
+
+      const panelButtons = document.getElementById("sidePanelButtons");
+      panelButtons.innerHTML = ""; // clear old stuff
+
+      // Populate mobile document list
+      const docList = document.getElementById("mobileDocList");
+      docList.innerHTML = "";
+
+      Object.keys(notes).forEach((name) => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        li.classList.add("doc-item");
+
+        li.onclick = () => {
+          openNote(name);
+          sidePanel.classList.remove("open");
+        };
+
+        docList.appendChild(li);
+      });
+
+      // Link mobile buttons to their functionality
+      linkMobileButtons();
+    }
+    // Attach to close button
+    document.getElementById("closePanelBtn").addEventListener("click", () => {
+      document.getElementById("sidePanel").classList.remove("open");
+    });
+    function linkMobileButtons() {
+      // Link new note button
+      const newNoteBtnMobile = document.getElementById("newNoteBtnMobile");
+      if (newNoteBtnMobile) {
+        newNoteBtnMobile.addEventListener("click", () => {
+          newNoteBtn.click();
+          toggleMenu();
+        });
+      }
+
+      // Link dark mode toggle
+      const darkToggleMobile = document.getElementById("darkToggleMobile");
+      if (darkToggleMobile) {
+        darkToggleMobile.addEventListener("click", () => {
+          darkToggle.click();
+        });
+      }
+
+      // Link download button
+      const downloadBtnMobile = document.getElementById("downloadBtnMobile");
+      if (downloadBtnMobile) {
+        downloadBtnMobile.addEventListener("click", () => {
+          downloadBtn.click();
+          toggleMenu();
+        });
+      }
+
+      // Link logout button
+      const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+      if (logoutBtnMobile) {
+        logoutBtnMobile.addEventListener("click", () => {
+          logout();
+          toggleMenu();
+        });
+      }
     }
     function openModal(id) {
       document.getElementById(id).style.display = "flex";
