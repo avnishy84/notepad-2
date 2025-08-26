@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
+  <defs>
+    <style>
+      .logo-text { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; 
+        font-weight: 600; 
+        fill: #8cc63f;
+      }
+    </style>
+  </defs>
+  
+  
+  <!-- Icon background -->
+  <rect x="50" y="50" width="100" height="100" rx="20" ry="20" fill="#8cc63f"/>
+  
+  <!-- Icon symbol (stylized "1" or "I") -->
+  <rect x="75" y="70" width="50" height="60" rx="5" ry="5" fill="white"/>
+  
+  <!-- Text -->
+  <text x="180" y="130" class="logo-text" font-size="72">One Editor</text>
+</svg>

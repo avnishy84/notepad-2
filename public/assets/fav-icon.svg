@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="One Editor icon">
+<title>One Editor icon</title>
+<defs>
+<mask id="cutout-mask">
+<!-- white = visible, black = cut out -->
+<rect x="0" y="0" width="512" height="512" fill="white" />
+<!-- inner vertical cutout -->
+<rect x="188" y="144" width="136" height="224" fill="black" rx="8" />
+</mask>
+</defs>
+<!-- rounded square background -->
+<rect x="56" y="56" width="400" height="400" rx="48" ry="48" fill="#8cc63f" mask="url(#cutout-mask)" />
+</svg>

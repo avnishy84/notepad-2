@@ -1,5 +1,5 @@
 // Import Firebase modules
-import { auth, db } from "./firebase.js";
+import { auth, db } from "../firebase/firebase.js";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -164,9 +164,20 @@ window.addEventListener("DOMContentLoaded", function() {
   loadEditorFontSize();
   // Apply last used font color to future selections via picker default
   const picker = document.getElementById('fontColorPicker');
+  const colorSwatch = document.getElementById('colorSwatch');
   const savedColor = localStorage.getItem('editorFontColor');
   if (picker && savedColor) {
       picker.value = savedColor;
+      if (colorSwatch) colorSwatch.style.backgroundColor = savedColor;
+  }
+  // Color picker: apply on change only (no live updates)
+  if (picker) {
+      picker.addEventListener('mousedown', saveCurrentSelectionRange);
+      picker.addEventListener('focus', saveCurrentSelectionRange);
+      picker.addEventListener('change', () => {
+          if (colorSwatch) colorSwatch.style.backgroundColor = picker.value;
+          editor.focus();
+      });
   }
   // Attach close panel handler
   const closeBtn = document.getElementById("closePanelBtn");
@@ -467,11 +478,47 @@ function applyFontColorToSelection(colorHex) {
 function setFontColor(colorHex) {
     if (!colorHex) return;
     localStorage.setItem('editorFontColor', colorHex);
+    // Restore selection in case the color input stole focus
+    restoreSavedSelectionRange();
     applyFontColorToSelection(colorHex);
 }
 
 // Expose for toolbar
 window.setFontColor = setFontColor;
+
+// ---------------- Color Picker UX Enhancements ----------------
+let savedSelectionRange = null;
+
+function saveCurrentSelectionRange() {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    const range = selection.getRangeAt(0);
+    // Only save if the selection is within the editor
+    if (editor.contains(range.startContainer) && editor.contains(range.endContainer)) {
+        savedSelectionRange = range.cloneRange();
+    }
+}
+
+function restoreSavedSelectionRange() {
+    if (!savedSelectionRange) return;
+    const selection = window.getSelection();
+    if (!selection) return;
+    try {
+        selection.removeAllRanges();
+        selection.addRange(savedSelectionRange);
+    } catch (_) { /* ignore */ }
+}
+
+// Keep the saved selection updated while user selects text in the editor
+document.addEventListener('selectionchange', () => {
+    const active = document.activeElement;
+    if (active === editor) {
+        saveCurrentSelectionRange();
+    }
+});
+
+// Ensure coloring uses inline CSS styles for better cross-browser behavior
+try { document.execCommand('styleWithCSS', false, true); } catch (_) {}
 
 // ---------------- Shortcuts ----------------
 document.addEventListener("keydown", function (e) {

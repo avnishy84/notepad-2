@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - One Editor</title>
+  <link rel="icon" href="assets/fav-icon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #f59e0b;
+      --bg-primary: #00030a;
+      --bg-secondary: rgba(8, 15, 27, 0.788);
+      --bg-tertiary: rgba(13, 19, 27, 0.9);
+      --bg-glass: rgba(30, 41, 59, 0.6);
+      --bg-glass-hover: rgba(30, 41, 59, 0.8);
+      --bg-glass-light: rgba(255, 255, 255, 0.05);
+      --text-primary: #ffffff;
+      --text-secondary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --border-light: rgba(255, 255, 255, 0.15);
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --red-accent: #ef4444;
+      --gradient: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(30, 64, 175, 0.8) 100%);
+      --gradient-accent: linear-gradient(135deg, rgba(245, 158, 11, 0.8) 0%, rgba(217, 119, 6, 0.8) 100%);
+      --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 16px 48px 0 rgba(0, 0, 0, 0.3);
+      --glow: 0 0 20px rgba(59, 130, 246, 0.2);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      /* Subtle background pattern */
+      background-image: 
+        radial-gradient(at 47% 33%, rgba(59, 130, 246, 0.1) 0, transparent 59%),
+        radial-gradient(at 82% 65%, rgba(245, 158, 11, 0.08) 0, transparent 55%);
+    }
+
+    header {
+      padding: 1rem 2rem;
+      background: rgba(0, 0, 0, 0.7);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .back-link:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--primary);
+      box-shadow: var(--glow);
+      transform: translateX(-2px);
+    }
+
+    .back-link::before {
+      content: '←';
+      font-size: 1.2em;
+    }
+
+    main {
+      flex: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      width: 100%;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+      opacity: 0.8;
+    }
+
+    /* Logo styles */
+    .logo-wrap {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .logo-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: radial-gradient(60% 60% at 50% 50%, rgba(59,130,246,0.4) 0%, rgba(59,130,246,0.15) 60%, transparent 70%);
+      filter: blur(6px);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      background: var(--bg-glass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+    .logo-img img {
+      width: 60%;
+      height: 60%;
+      object-fit: contain;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-weight: 400;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .feature-card {
+      background: var(--bg-glass);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-light);
+      background: var(--bg-glass-hover);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient);
+    }
+
+    .feature-icon {
+      width: 3rem;
+      height: 3rem;
+      background: var(--gradient);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .feature-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .about-section {
+      background: var(--bg-glass);
+      padding: 3rem;
+      border-radius: 1rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin: 3rem 0;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .about-section h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .about-section p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .tech-stack {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 2rem;
+      font-weight: 500;
+      color: var(--primary);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .tech-item:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--primary);
+      box-shadow: var(--glow);
+    }
+
+    .cta-section {
+      text-align: center;
+      margin: 4rem 0;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--gradient);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg), var(--glow);
+      background: var(--gradient);
+    }
+
+    footer {
+      background: rgba(15, 23, 42, 0.7);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: auto;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+      }
+
+      main {
+        padding: 2rem 1rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .about-section {
+        padding: 2rem 1.5rem;
+      }
+
+      .tech-stack {
+        gap: 1rem;
+      }
+
+      .tech-item {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .logo-wrap {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero, .features-grid, .about-section {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .feature-card:nth-child(2) { animation-delay: 0.2s; }
+    .feature-card:nth-child(3) { animation-delay: 0.3s; }
+    .feature-card:nth-child(4) { animation-delay: 0.4s; }
+    .feature-card:nth-child(5) { animation-delay: 0.5s; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="index.html" class="back-link">Back to App</a>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="logo-wrap">
+        <div class="logo-ring"></div>
+        <div class="logo-img">
+          <!-- Using the icon.svg from assets folder -->
+          <img src="assets/fav-icon.svg" alt="One Editor logo" />
+        </div>
+      </div>
+      <h1>One Editor</h1>
+      <p class="hero-subtitle">A simple, fast, and secure note-taking app designed for modern productivity</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">✍️</div>
+        <h3 class="feature-title">Rich Text Editing</h3>
+        <p class="feature-description">Format your notes with bold, italic, lists, headings, and more using an intuitive editor.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📑</div>
+        <h3 class="feature-title">Multiple Notes</h3>
+        <p class="feature-description">Organize your thoughts across multiple notes with an easy-to-use tab interface.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🌙</div>
+        <h3 class="feature-title">Dark Mode</h3>
+        <p class="feature-description">Easy on the eyes with automatic dark mode that adapts to your system preferences.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💾</div>
+        <h3 class="feature-title">Export Notes</h3>
+        <p class="feature-description">Download your notes as HTML files for backup or sharing with others.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3 class="feature-title">Cloud Sync</h3>
+        <p class="feature-description">Access your notes from any device when logged in. Changes sync automatically.</p>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <h2>Crafted with Care</h2>
+      <p>One Editor was built with a focus on simplicity, performance, and user privacy. Every feature is designed to enhance your note-taking experience without getting in the way.</p>
+      
+      <div class="tech-stack">
+        <div class="tech-item">
+          <span>🟨</span>
+          <span>JavaScript</span>
+        </div>
+        <div class="tech-item">
+          <span>🔥</span>
+          <span>Firebase</span>
+        </div>
+        <div class="tech-item">
+          <span>🎨</span>
+          <span>Modern CSS</span>
+        </div>
+        <div class="tech-item">
+          <span>⚡</span>
+          <span>Vanilla JS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <a href="index.html" class="cta-button">
+        Start Taking Notes
+        <span>→</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <div>Made with ❤️ by Avnish</div>
+  </footer>
+</body>
+
+</html>
