@@ -457,6 +457,17 @@ window.toggleMenu = toggleMenu;
 
 // ---------------- Formatting ----------------
 function formatText(command, value = null) {
+    if (command === 'formatBlock') {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const parentElement = range.startContainer.parentElement;
+            if (parentElement.tagName.toLowerCase() === value) {
+                document.execCommand('formatBlock', false, 'p'); // Un-format to a paragraph
+                return;
+            }
+        }
+    }
     document.execCommand(command, false, value);
     editor.focus();
 }
@@ -528,6 +539,9 @@ document.addEventListener("keydown", function (e) {
             case "b": e.preventDefault(); document.execCommand("bold"); break;
             case "i": e.preventDefault(); document.execCommand("italic"); break;
             case "u": e.preventDefault(); document.execCommand("underline"); break;
+            case "s": if (e.shiftKey) { e.preventDefault(); document.execCommand("strikeThrough"); } break;
+            case "b": if (e.shiftKey) { e.preventDefault(); document.execCommand("formatBlock", false, "blockquote"); } break;
+            case "c": if (e.shiftKey) { e.preventDefault(); document.execCommand("formatBlock", false, "pre"); } break;
             case "z": e.preventDefault(); document.execCommand(e.shiftKey ? "redo" : "undo"); break;
             case "7": if (e.shiftKey) { e.preventDefault(); document.execCommand("insertOrderedList"); } break;
             case "8": if (e.shiftKey) { e.preventDefault(); document.execCommand("insertUnorderedList"); } break;
@@ -612,9 +626,6 @@ onAuthStateChanged(auth, (user) => {
         console.error(err);
     }
 };
-// expose for mobile menu
-window.notes = notes;
-window.openNote = openNote;
 function openNote(noteName) {
   // Save current note content before switching
   notes[currentNote] = editor.innerHTML;
@@ -630,3 +641,58 @@ function openNote(noteName) {
   
   console.log("Opened note:", noteName);
 }
+
+// ---------------- Expose to global scope for inline event handlers ----------------
+Object.assign(window, {
+    openModal,
+    closeModal,
+    login,
+    signup,
+    logout,
+    googleLogin,
+    toggleMenu,
+    formatText,
+    clearFormatting,
+    setFontColor,
+    increaseFontSize,
+    decreaseFontSize,
+    downloadBtn,
+    newNoteBtn,
+    darkToggle,
+    editor,
+    status,
+    tabsContainer,
+    currentNote,
+    notes,
+    deletedNotes,
+    switchNote,
+    closeNote,
+    actuallyCloseNote,
+    ensureConfirmDialog,
+    showConfirmDialog,
+    saveNotes,
+    loadNotes,
+    updateStatus,
+    linkMobileButtons,
+    openNote,
+    applyEditorFontSize,
+    loadEditorFontSize,
+    saveEditorFontSize,
+    applyFontColorToSelection,
+    saveCurrentSelectionRange,
+    restoreSavedSelectionRange,
+    provider,
+    auth,
+    db,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp,
+    deleteField,
+    GoogleAuthProvider,
+    signInWithPopup,
+});
