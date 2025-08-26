@@ -9,7 +9,9 @@ import {
 import {
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    serverTimestamp,
+    deleteField
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { GoogleAuthProvider, signInWithPopup } 
   from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
@@ -21,8 +23,60 @@ const tabsContainer = document.getElementById('tabs');
 const status = document.getElementById('status');
 
 let notes = { "Note 1": "" };
+let deletedNotes = {};
 let currentNote = Object.keys(notes)[0];
 const provider = new GoogleAuthProvider();
+
+// ---------------- Editor Font Size ----------------
+const MIN_FONT_PX = 12;
+const MAX_FONT_PX = 48;
+const FONT_STEP_PX = 2;
+const DEFAULT_FONT_PX = 16;
+
+function applyEditorFontSize(px) {
+    const clamped = Math.max(MIN_FONT_PX, Math.min(MAX_FONT_PX, px));
+    editor.style.fontSize = clamped + 'px';
+}
+
+function loadEditorFontSize() {
+    const stored = localStorage.getItem('editorFontSizePx');
+    const size = stored ? parseInt(stored, 10) : DEFAULT_FONT_PX;
+    applyEditorFontSize(isNaN(size) ? DEFAULT_FONT_PX : size);
+}
+
+function saveEditorFontSize(px) {
+    localStorage.setItem('editorFontSizePx', String(px));
+}
+
+function increaseFontSize() {
+    const current = parseInt(window.getComputedStyle(editor).fontSize, 10) || DEFAULT_FONT_PX;
+    const next = Math.min(current + FONT_STEP_PX, MAX_FONT_PX);
+    applyEditorFontSize(next);
+    saveEditorFontSize(next);
+}
+
+function decreaseFontSize() {
+    const current = parseInt(window.getComputedStyle(editor).fontSize, 10) || DEFAULT_FONT_PX;
+    const next = Math.max(current - FONT_STEP_PX, MIN_FONT_PX);
+    applyEditorFontSize(next);
+    saveEditorFontSize(next);
+}
+
+// Expose for toolbar buttons
+window.increaseFontSize = increaseFontSize;
+window.decreaseFontSize = decreaseFontSize;
+
+// Shift + Mouse Wheel to adjust font size
+editor.addEventListener('wheel', function (event) {
+    if (event.shiftKey) {
+        event.preventDefault();
+        if (event.deltaY < 0) {
+            increaseFontSize();
+        } else if (event.deltaY > 0) {
+            decreaseFontSize();
+        }
+    }
+}, { passive: false });
 
 // ---------------- Tabs ----------------
 function renderTabs() {
@@ -107,6 +161,23 @@ window.addEventListener("DOMContentLoaded", function() {
   renderTabs();
   editor.innerHTML = notes[currentNote];
   updateStatus();
+  loadEditorFontSize();
+  // Apply last used font color to future selections via picker default
+  const picker = document.getElementById('fontColorPicker');
+  const savedColor = localStorage.getItem('editorFontColor');
+  if (picker && savedColor) {
+      picker.value = savedColor;
+  }
+  // Attach close panel handler
+  const closeBtn = document.getElementById("closePanelBtn");
+  if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+          const panel = document.getElementById("sidePanel");
+          if (panel) panel.classList.remove("open");
+      });
+  }
+  // Ensure reusable confirm dialog exists
+  ensureConfirmDialog();
 });
 // Close menu when clicking outside
 document.addEventListener("click", (e) => {
@@ -124,6 +195,33 @@ function closeNote(name) {
         alert("You can't close the last note!");
         return;
     }
+    // Confirm if note contains content
+    const html = notes[name] || "";
+    const tmpDiv = document.createElement('div');
+    tmpDiv.innerHTML = html;
+    const plain = (tmpDiv.textContent || tmpDiv.innerText || "").trim();
+    if (plain.length > 0) {
+        showConfirmDialog({
+            title: 'Delete note?',
+            message: 'This note contains content. Do you really want to delete it?',
+            okText: 'Delete',
+            cancelText: 'Cancel'
+        }).then((confirmed) => {
+            if (confirmed) {
+                actuallyCloseNote(name);
+            }
+        });
+        return;
+    }
+    actuallyCloseNote(name);
+}
+
+function actuallyCloseNote(name) {
+    // Mark as deleted locally
+    const deletionInfo = { deleted: true, deletedAt: new Date().toISOString() };
+    deletedNotes[name] = deletionInfo;
+
+    // Optimistically update UI
     delete notes[name];
     if (currentNote === name) {
         currentNote = Object.keys(notes)[0];
@@ -132,7 +230,80 @@ function closeNote(name) {
     updateStatus();
     renderTabs();
     saveNotes();
+
+    // Persist deletion to Firestore: remove from notes, add to deletedNotes
+    if (auth.currentUser) {
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
+        setDoc(userDocRef, {
+            notes: { [name]: deleteField() },
+            deletedNotes: { [name]: { deleted: true, deletedAt: new Date().toISOString() } }
+        }, { merge: true }).catch((err) => {
+            console.error("Failed to persist deletion:", err);
+        });
+    }
 }
+
+function ensureConfirmDialog() {
+    if (document.getElementById('confirmDialogModal')) return;
+    const modal = document.createElement('div');
+    modal.id = 'confirmDialogModal';
+    modal.className = 'modal';
+    modal.style.display = 'none';
+
+    modal.innerHTML = `
+      <div class="popup-content">
+        <div style="font-size: x-large;font-weight: 600;" id="confirmDialogTitle">Confirm</div>
+        <p style="margin:0; padding:0;" id="confirmDialogMessage">Are you sure?</p>
+        <div class="modal-actions" style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+          <button id="confirmDialogCancel">Cancel</button>
+          <button id="confirmDialogOk" class="danger">OK</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const cancelBtn = modal.querySelector('#confirmDialogCancel');
+    const okBtn = modal.querySelector('#confirmDialogOk');
+    cancelBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        const resolver = modal.__resolver;
+        if (resolver) resolver(false);
+        modal.__resolver = null;
+    });
+    okBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        const resolver = modal.__resolver;
+        if (resolver) resolver(true);
+        modal.__resolver = null;
+    });
+}
+
+function showConfirmDialog(options = {}) {
+    ensureConfirmDialog();
+    const { title = 'Confirm', message = 'Are you sure?', okText = 'OK', cancelText = 'Cancel' } = options;
+    const modal = document.getElementById('confirmDialogModal');
+    if (!modal) return Promise.resolve(false);
+    modal.querySelector('#confirmDialogTitle').textContent = title;
+    modal.querySelector('#confirmDialogMessage').textContent = message;
+    modal.querySelector('#confirmDialogOk').textContent = okText;
+    modal.querySelector('#confirmDialogCancel').textContent = cancelText;
+    modal.style.display = 'flex';
+    return new Promise((resolve) => {
+        modal.__resolver = resolve;
+    });
+}
+
+//example to use confirm dialog
+// showConfirmDialog({
+//     title: 'Warning',
+//     message: 'Perform this action?',
+//     okText: 'Proceed',
+//     cancelText: 'Cancel'
+//   }).then(confirmed => {
+//     if (confirmed) {
+//       // do action
+//     }
+//   });
 
 // ---------------- Save / Load ----------------
 async function saveNotes() {
@@ -156,6 +327,7 @@ async function loadNotes(uid) {
             const data = docSnap.data();
             if (data.notes && Object.keys(data.notes).length > 0) {
                 notes = data.notes;
+                deletedNotes = data.deletedNotes || {};
                 currentNote = Object.keys(notes)[0];
                 editor.innerHTML = notes[currentNote];
                 console.log("Notes loaded for", uid);
@@ -240,6 +412,38 @@ renderTabs();
 editor.innerHTML = notes[currentNote];
 updateStatus();
 
+// ---------------- Mobile Side Panel ----------------
+function toggleMenu() {
+    const sidePanel = document.getElementById("sidePanel");
+    if (!sidePanel) return;
+    sidePanel.classList.toggle("open");
+
+    const panelButtons = document.getElementById("sidePanelButtons");
+    if (panelButtons) panelButtons.innerHTML = "";
+
+    // Populate mobile document list
+    const docList = document.getElementById("mobileDocList");
+    if (docList) {
+        docList.innerHTML = "";
+        Object.keys(notes).forEach((name) => {
+            const li = document.createElement("li");
+            li.textContent = name;
+            li.classList.add("doc-item");
+            li.onclick = () => {
+                openNote(name);
+                sidePanel.classList.remove("open");
+            };
+            docList.appendChild(li);
+        });
+    }
+
+    // Link mobile buttons to their functionality
+    linkMobileButtons();
+}
+
+// Expose for hamburger button
+window.toggleMenu = toggleMenu;
+
 // ---------------- Formatting ----------------
 function formatText(command, value = null) {
     document.execCommand(command, false, value);
@@ -249,6 +453,25 @@ function clearFormatting() {
     document.execCommand('removeFormat', false, null);
     editor.focus();
 }
+
+// ---------------- Font Color ----------------
+function applyFontColorToSelection(colorHex) {
+    editor.focus();
+    try {
+        document.execCommand('foreColor', false, colorHex);
+    } catch (e) {
+        console.warn('foreColor execCommand failed', e);
+    }
+}
+
+function setFontColor(colorHex) {
+    if (!colorHex) return;
+    localStorage.setItem('editorFontColor', colorHex);
+    applyFontColorToSelection(colorHex);
+}
+
+// Expose for toolbar
+window.setFontColor = setFontColor;
 
 // ---------------- Shortcuts ----------------
 document.addEventListener("keydown", function (e) {

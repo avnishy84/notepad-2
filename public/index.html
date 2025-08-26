@@ -66,6 +66,9 @@
     <button onclick="formatText('insertUnorderedList')">•</button>
     <button onclick="formatText('formatBlock', 'h1')">H1</button>
     <button onclick="formatText('formatBlock', 'h2')">H2</button>
+    <button onclick="decreaseFontSize()" title="Decrease text size">A-</button>
+    <button onclick="increaseFontSize()" title="Increase text size">A+</button>
+    <input class="font-color-picker" id="fontColorPicker" type="color" title="Text color" onchange="setFontColor(this.value)" />
     <button onclick="clearFormatting()">Clear</button>
   </div>
 
@@ -115,100 +118,23 @@
   <script type="module" src="js/firebase.js"></script>
   <script type="module" src="js/sync.js"></script>
 
-  <!-- Modal script -->
+  <!-- Reusable confirm dialog is created dynamically in js/app.js -->
+
+  <!-- Fallback: ensure global formatting functions exist for inline toolbar buttons -->
   <script>
-    const sidePanel = document.getElementById("sidePanel");
-    const panelButtons = document.getElementById("sidePanelButtons");
-    const header = document.querySelector("header"); // original parent
-
-    const elementsToMove = [
-      document.getElementById("authButtons"),
-      document.getElementById("logoutSection"),
-      document.getElementById("tabs"),
-      document.getElementById("newNoteBtn"),
-      document.querySelector(".actions"),
-    ];
-
-    function toggleMenu() {
-      const sidePanel = document.getElementById("sidePanel");
-      sidePanel.classList.toggle("open");
-
-      const panelButtons = document.getElementById("sidePanelButtons");
-      panelButtons.innerHTML = ""; // clear old stuff
-
-      // Populate mobile document list
-      const docList = document.getElementById("mobileDocList");
-      docList.innerHTML = "";
-
-      Object.keys(notes).forEach((name) => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        li.classList.add("doc-item");
-
-        li.onclick = () => {
-          openNote(name);
-          sidePanel.classList.remove("open");
-        };
-
-        docList.appendChild(li);
-      });
-
-      // Link mobile buttons to their functionality
-      linkMobileButtons();
-    }
-    // Attach to close button
-    document.getElementById("closePanelBtn").addEventListener("click", () => {
-      document.getElementById("sidePanel").classList.remove("open");
-    });
-    function linkMobileButtons() {
-      // Link new note button
-      const newNoteBtnMobile = document.getElementById("newNoteBtnMobile");
-      if (newNoteBtnMobile) {
-        newNoteBtnMobile.addEventListener("click", () => {
-          newNoteBtn.click();
-          toggleMenu();
-        });
-      }
-
-      // Link dark mode toggle
-      const darkToggleMobile = document.getElementById("darkToggleMobile");
-      if (darkToggleMobile) {
-        darkToggleMobile.addEventListener("click", () => {
-          darkToggle.click();
-        });
-      }
-
-      // Link download button
-      const downloadBtnMobile = document.getElementById("downloadBtnMobile");
-      if (downloadBtnMobile) {
-        downloadBtnMobile.addEventListener("click", () => {
-          downloadBtn.click();
-          toggleMenu();
-        });
-      }
-
-      // Link logout button
-      const logoutBtnMobile = document.getElementById("logoutBtnMobile");
-      if (logoutBtnMobile) {
-        logoutBtnMobile.addEventListener("click", () => {
-          logout();
-          toggleMenu();
-        });
-      }
-    }
-    function openModal(id) {
-      document.getElementById(id).style.display = "flex";
-    }
-    function closeModal(id) {
-      document.getElementById(id).style.display = "none";
-    }
-    window.onclick = function (event) {
-      const loginModal = document.getElementById("loginPopup");
-      const signupModal = document.getElementById("signupPopup");
-      if (event.target === loginModal) loginModal.style.display = "none";
-      if (event.target === signupModal) signupModal.style.display = "none";
-    }
+    window.formatText = window.formatText || function (command, value) {
+      try { document.execCommand(command, false, value || null); } catch (e) {}
+      var ed = document.getElementById('editor');
+      if (ed) ed.focus();
+    };
+    window.clearFormatting = window.clearFormatting || function () {
+      try { document.execCommand('removeFormat', false, null); } catch (e) {}
+      var ed = document.getElementById('editor');
+      if (ed) ed.focus();
+    };
   </script>
+
+  <!-- Inline modal/side-panel logic moved to js/app.js -->
 </body>
 
 </html>
