@@ -15,8 +15,7 @@ Perfect for quick note-taking, accessible from any device.
 ---
 
 ## 🌐 Live Demo
-[Click here to open the app](https://avnishy84.github.io/notepad-2/)
-
+[Click here to open the app](https://notepad-2-e34b1.web.app/index.html)
 ---
 
 ## 📂 Project Structure
@@ -29,7 +28,7 @@ notepad-2/
 ---
 
 ## 🛠 How to Use
-1. Open the [Live Demo link](https://avnishy84.github.io/notepad-2/).
+1. Open the [Live Demo link](https://notepad-2-e34b1.web.app/index.html).
 2. Start typing your notes in the editor.
 3. Notes are automatically saved in your browser.
 4. Access the app anytime on any device with the same URL.
@@ -46,7 +45,7 @@ git clone https://github.com/avnishy84/notepad-2.git
 cd notepad-2
 
 # Open the app in your browser
-start index.html   # Windows
+firebase serve   # Windows
 open index.html    # macOS
 
 📜 License
