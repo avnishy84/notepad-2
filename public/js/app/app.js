@@ -696,3 +696,93 @@ Object.assign(window, {
     GoogleAuthProvider,
     signInWithPopup,
 });
+
+const copyTechStackBtn = document.getElementById('copyTechStack');
+if (copyTechStackBtn) {
+    copyTechStackBtn.addEventListener('click', () => {
+        const techStack = [
+            'JavaScript',
+            'Firebase',
+            'Modern CSS',
+            'Vanilla JS'
+        ];
+        const techStackString = techStack.join(', ');
+        navigator.clipboard.writeText(techStackString);
+        alert('Tech stack copied to clipboard!');
+    });
+}
+
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        if (auth.currentUser) {
+            const userDocRef = doc(db, "users", auth.currentUser.uid);
+            setDoc(userDocRef, {
+                contact: {
+                    name: name,
+                    email: email,
+                    message: message,
+                    timestamp: serverTimestamp()
+                }
+            }, { merge: true }).then(() => {
+                alert('Your message has been sent!');
+                contactForm.reset();
+            }).catch((err) => {
+                console.error("Error sending message:", err);
+                alert('There was an error sending your message. Please try again later.');
+            });
+        } else {
+            alert('You must be logged in to send a message.');
+        }
+    });
+}
+
+const faqQuestions = document.querySelectorAll('.faq-question');
+if (faqQuestions) {
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+}
+
+function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent("Check out One Editor - a simple, fast, and secure note-taking app!");
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+}
+
+function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+}
+
+function shareOnLinkedIn() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}`, '_blank');
+}
+
+const backToTopBtn = document.querySelector('.back-to-top');
+if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+
+    backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}

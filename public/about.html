@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
-<body>
+<body class="light">
   <header class="header-about">
     <div id="authContainer">
       <!-- Auth buttons -->
@@ -130,6 +130,7 @@
           <span>⚡</span>
           <span>Vanilla JS</span>
         </div>
+        <button id="copyTechStack" class="copy-btn">Copy to Clipboard</button>
       </div>
     </div>
 
@@ -138,6 +139,62 @@
         Start Taking Notes
         <span>→</span>
       </a>
+    </div>
+
+    <div class="contact-section">
+      <h2>Contact Us</h2>
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <textarea id="message" placeholder="Your Message" required></textarea>
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>What is One Editor?</h3>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>One Editor is a simple, fast, and secure note-taking app designed for modern productivity. It allows you to create, edit, and organize your notes with ease.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>Is One Editor free to use?</h3>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, One Editor is completely free to use. You can create an account and start taking notes right away.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>How do I save my notes?</h3>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Your notes are automatically saved to the cloud when you are logged in. You can also download your notes as HTML files for backup or sharing with others.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="share-section">
+      <h2>Share this page</h2>
+      <div class="share-buttons">
+        <a href="#" class="share-btn twitter" onclick="shareOnTwitter()">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="share-btn facebook" onclick="shareOnFacebook()">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="share-btn linkedin" onclick="shareOnLinkedIn()">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </div>
     </div>
   </main>
 
@@ -182,6 +239,10 @@
   <script type="module" src="js/app/app.js"></script>
   <script type="module" src="js/firebase/firebase.js"></script>
   <script type="module" src="js/data/sync.js"></script>
+
+  <a href="#" class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </a>
 </body>
 
 </html>
