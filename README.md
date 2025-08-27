@@ -45,7 +45,7 @@ git clone https://github.com/avnishy84/notepad-2.git
 cd notepad-2
 
 # Open the app in your browser
-start index.html   # Windows
+firebase serve   # Windows
 open index.html    # macOS
 
 📜 License
