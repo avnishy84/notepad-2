@@ -18,6 +18,13 @@ body {
   height: 100vh;
 }
 
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
 /* ==== DARK MODE ==== */
 body.dark {
   --bg: rgba(10, 10, 10, 0.7);
@@ -37,6 +44,8 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 1000; /* Ensure header is on top */
+  flex-shrink: 0;
 }
 
 /* ---- TABS ---- */
@@ -194,6 +203,7 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 header {
@@ -789,4 +799,34 @@ body.color-picking .editor *::-moz-selection {
 
 .link:hover {
   color: var(--accent);
+}
+
+/* Custom scrollbar only for #editor */
+#editor {
+  overflow-y: auto; /* ensure scrolling works */
+}
+
+/* Scrollbar styles scoped to editor */
+#editor::-webkit-scrollbar {
+  width: 10px;   /* vertical scrollbar width */
+}
+
+#editor::-webkit-scrollbar-track {
+  background: #1e1e1e; /* track background */
+  border-radius: 10px;
+}
+
+#editor::-webkit-scrollbar-thumb {
+  background: #555; /* scrollbar handle */
+  border-radius: 10px;
+}
+
+#editor::-webkit-scrollbar-thumb:hover {
+  background: #999; /* hover effect */
+}
+
+/* Firefox support */
+#editor {
+  scrollbar-width: thin;
+  scrollbar-color: #555 #1e1e1e; /* thumb | track */
 }

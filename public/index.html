@@ -65,36 +65,38 @@
   </header>
 
   <!-- Toolbar -->
-  <div id="toolbar">
-    <button onclick="formatText('bold')"><b>B</b></button>
-    <button onclick="formatText('italic')"><i>I</i></button>
-    <button onclick="formatText('underline')"><u>U</u></button>
-    <button onclick="formatText('strikeThrough')"><s>S</s></button>
-    <button onclick="formatText('formatBlock', 'blockquote')">"</button>
-    <button onclick="formatText('formatBlock', 'pre')">{;}</button>
-    <button onclick="formatText('insertOrderedList')">1.</button>
-    <button onclick="formatText('insertUnorderedList')">•</button>
-    <button onclick="formatText('formatBlock', 'h1')">H1</button>
-    <button onclick="formatText('formatBlock', 'h2')">H2</button>
-    <button onclick="decreaseFontSize()" title="Decrease text size">A-</button>
-    <button onclick="increaseFontSize()" title="Increase text size">A+</button>
-    <!-- Improved color picker: hidden input + styled button with icon and swatch -->
-    <input id="fontColorPicker" class="color-picker-input" type="color" title="Text color" onchange="setFontColor(this.value)" />
-    <label for="fontColorPicker" class="color-picker-button" title="Text color">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M12 3a9 9 0 0 0-9 9 6 6 0 0 0 6 6h1.5a1.5 1.5 0 0 1 0 3H9a9 9 0 1 0 3-18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        <circle cx="8" cy="10" r="1.5" fill="currentColor"/>
-        <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
-        <circle cx="16" cy="10" r="1.5" fill="currentColor"/>
-        <circle cx="14" cy="14" r="1.5" fill="currentColor"/>
-      </svg>
-      <span id="colorSwatch" class="color-swatch"></span>
-    </label>
-    <button onclick="clearFormatting()">Clear</button>
-  </div>
+  <main class="main-content">
+    <div id="toolbar">
+      <button onclick="formatText('bold')"><b>B</b></button>
+      <button onclick="formatText('italic')"><i>I</i></button>
+      <button onclick="formatText('underline')"><u>U</u></button>
+      <button onclick="formatText('strikeThrough')"><s>S</s></button>
+      <button onclick="formatText('formatBlock', 'blockquote')">"</button>
+      <button onclick="formatText('formatBlock', 'pre')">{;}</button>
+      <button onclick="formatText('insertOrderedList')">1.</button>
+      <button onclick="formatText('insertUnorderedList')">•</button>
+      <button onclick="formatText('formatBlock', 'h1')">H1</button>
+      <button onclick="formatText('formatBlock', 'h2')">H2</button>
+      <button onclick="decreaseFontSize()" title="Decrease text size">A-</button>
+      <button onclick="increaseFontSize()" title="Increase text size">A+</button>
+      <!-- Improved color picker: hidden input + styled button with icon and swatch -->
+      <input id="fontColorPicker" class="color-picker-input" type="color" title="Text color" onchange="setFontColor(this.value)" />
+      <label for="fontColorPicker" class="color-picker-button" title="Text color">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3a9 9 0 0 0-9 9 6 6 0 0 0 6 6h1.5a1.5 1.5 0 0 1 0 3H9a9 9 0 1 0 3-18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="8" cy="10" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
+          <circle cx="16" cy="10" r="1.5" fill="currentColor"/>
+          <circle cx="14" cy="14" r="1.5" fill="currentColor"/>
+        </svg>
+        <span id="colorSwatch" class="color-swatch"></span>
+      </label>
+      <button onclick="clearFormatting()">Clear</button>
+    </div>
 
-  <!-- Text editor -->
-  <div id="editor" contenteditable="true" class="editor textarea" placeholder="Start typing..."></div>
+    <!-- Text editor -->
+    <div id="editor" contenteditable="true" class="editor textarea" placeholder="Start typing..."></div>
+  </main>
 
   <!-- Footer -->
   <footer>
