@@ -19,10 +19,10 @@ body {
 }
 
 .main-content {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ==== DARK MODE ==== */
@@ -44,7 +44,8 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000; /* Ensure header is on top */
+  z-index: 1000;
+  /* Ensure header is on top */
   flex-shrink: 0;
 }
 
@@ -107,8 +108,9 @@ header {
 }
 
 body.dark tab {
-color: var(--text);
+  color: var(--text);
 }
+
 /* ---- CLOSE BUTTON ---- */
 .close-btn {
   font-size: 12px;
@@ -455,6 +457,7 @@ body.dark .editor {
 .popup-close-btn:hover {
   color: red;
 }
+
 .auth-box {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(18px) saturate(150%);
@@ -548,32 +551,44 @@ body.dark .editor {
   justify-content: center;
   gap: 8px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .google-btn:hover {
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
 .google-btn img {
   width: 20px;
   height: 20px;
 }
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
+
 /* Fullscreen side panel */
 .side-panel {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;       /* full screen */
+  width: 100%;
+  /* full screen */
   height: 100%;
-  background: rgba(20, 20, 20, 0.95); /* dark overlay */
-  transform: translateX(-100%);       /* hidden */
+  background: rgba(20, 20, 20, 0.95);
+  /* dark overlay */
+  transform: translateX(-100%);
+  /* hidden */
   transition: transform 0.3s ease-in-out;
   z-index: 2000;
   overflow-y: auto;
@@ -581,7 +596,8 @@ body.dark .editor {
 
 /* When open */
 .side-panel.open {
-  transform: translateX(0); /* slide in */
+  transform: translateX(0);
+  /* slide in */
   height: 96vh;
 }
 
@@ -604,25 +620,37 @@ body.dark .editor {
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .close-panel:hover {
   background: #555;
 }
 
 /* Default (desktop) */
-#sidePanel { display: none; }
-header .actions, #tabs, #newNoteBtn { display: flex; }
+#sidePanel {
+  display: none;
+}
+
+header .actions,
+#tabs,
+#newNoteBtn {
+  display: flex;
+}
 
 /* Mobile view */
 @media (max-width: 768px) {
+
   header .actions,
   #tabs,
   #newNoteBtn {
     display: none;
   }
+
   #sidePanel.open {
-    display: block; /* show drawer */
+    display: block;
+    /* show drawer */
   }
 }
+
 .doc-list {
   list-style: none;
   padding: 0;
@@ -638,6 +666,7 @@ header .actions, #tabs, #newNoteBtn { display: flex; }
 .doc-item:hover {
   background: #f0f0f0;
 }
+
 .side-panel {
   position: fixed;
   top: 0;
@@ -645,7 +674,7 @@ header .actions, #tabs, #newNoteBtn { display: flex; }
   width: 300px;
   height: 100%;
   background: white;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease;
   z-index: 1000;
   display: flex;
@@ -759,22 +788,26 @@ header .actions, #tabs, #newNoteBtn { display: flex; }
   transition: all 0.2s ease-in-out;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
+
 .color-picker-button:hover {
   background: #3b3b3b;
   transform: translateY(-1px);
 }
+
 .color-picker-button:active {
   transform: scale(0.98);
 }
+
 .color-picker-button svg {
   display: block;
 }
+
 .color-swatch {
   width: 16px;
   height: 16px;
   border-radius: 4px;
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: inset 0 0 2px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
 }
 
 /* During color picking, reduce selection overlay so color changes are visible */
@@ -783,6 +816,7 @@ body.color-picking .editor *::selection {
   background: rgba(128, 128, 128, 0.18) !important;
   color: inherit !important;
 }
+
 body.color-picking .editor *::-moz-selection {
   background: rgba(128, 128, 128, 0.18) !important;
   color: inherit !important;
@@ -803,115 +837,260 @@ body.color-picking .editor *::-moz-selection {
 
 /* Custom scrollbar only for #editor */
 #editor {
-  overflow-y: auto; /* ensure scrolling works */
-}
-
-/* Scrollbar styles scoped to editor */
-#editor::-webkit-scrollbar {
-  width: 10px;   /* vertical scrollbar width */
-}
-
-#editor::-webkit-scrollbar-track {
-  background: #1e1e1e; /* track background */
-  border-radius: 10px;
-}
-
-#editor::-webkit-scrollbar-thumb {
-  background: #555; /* scrollbar handle */
-  border-radius: 10px;
-}
-
-#editor::-webkit-scrollbar-thumb:hover {
-  background: #999; /* hover effect */
-}
-
-/* Firefox support */
-#editor {
-  scrollbar-width: thin;
-  scrollbar-color: #555 #1e1e1e; /* thumb | track */
+  overflow-y: auto;
+  /* ensure scrolling works */
 }
 
 /* Settings Page Styles */
 .settings-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 .settings-container h1 {
-    margin-bottom: 2rem;
-    color: var(--text-color);
+  margin-bottom: 2rem;
+  color: var(--text-color);
 }
 
 .settings-section {
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
 }
 
 .settings-section h2 {
-    margin-bottom: 1rem;
-    color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .setting-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .setting-item label {
-    font-weight: 500;
-    color: var(--text-color);
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .setting-item select,
 .setting-item input[type="checkbox"] {
-    padding: 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-primary);
-    color: var(--text-color);
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-primary);
+  color: var(--text-color);
 }
 
 .setting-item select {
-    min-width: 150px;
+  min-width: 150px;
 }
 
 .btn-secondary {
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
 .btn-secondary:hover {
-    background: var(--accent-hover);
+  background: var(--accent-hover);
 }
 
 .btn-danger {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
 .btn-danger:hover {
-    background: #c82333;
+  background: #c82333;
+}
+
+/* Custom Shortcut Dialog Styles */
+.modal .popup-content h3 {
+  margin-bottom: 15px;
+  color: var(--text-color);
+}
+
+.modal .popup-content label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+.modal .popup-content input,
+.modal .popup-content textarea,
+.modal .popup-content select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-primary);
+  color: var(--text-color);
+  font-family: inherit;
+}
+
+.modal .popup-content input:focus,
+.modal .popup-content textarea:focus,
+.modal .popup-content select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.modal .popup-content small {
+  color: var(--text-secondary);
+  font-size: 0.85em;
+}
+
+.modal .popup-content button.primary {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal .popup-content button.primary:hover {
+  background: var(--accent-hover);
+}
+
+.styled-select {
+  width: 100%;
+  margin: 5px 0;
+  padding: 8px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  background: #f9f9f9;
+  font-size: 16px;
+  text-align: center;
+  text-align-last: center;
+  /* centers selected option */
+  cursor: pointer;
+}
+
+/* style dropdown options */
+.styled-select option {
+  text-align: center;
+  padding: 10px;
+  background: #fff;
+  color: #333;
+}
+
+.styled-select option:hover {
+  background: #007BFF;
+  color: #fff;
+}
+
+.preview-text {
+  max-height: 50px;
+  min-width: 260px;
+  background: rgb(255 255 255 / 21%);
+  padding: 10px;
+  border-radius: 4px;
+  margin: 5px 0;
+  white-space: pre-wrap;
+  /* ✅ preserve line breaks & wrap text */
+  word-wrap: break-word;
+  /* ✅ break long continuous words */
+  overflow-wrap: break-word;
+  /* ✅ modern browsers */
+  max-width: 260px;
+  /* optional: limit height */
+  overflow-y: auto;
+  /* optional: add scrollbar if too long */
+  min-height: 25px;
+}
+
+.text-template {
+  max-height: 50px;
+  max-width: 260px;
+  /* optional: limit height */
+  background: rgb(255 255 255 / 21%) !important;
+  color: #333;
+  min-width: 260px;
+}
+
+/* Scrollbar styles scoped to editor */
+/* Common custom scrollbar styles */
+#previewText::-webkit-scrollbar,
+#editor::-webkit-scrollbar,
+#textTemplate::-webkit-scrollbar {
+  width: 10px;
+  /* vertical scrollbar width */
+}
+
+#previewText::-webkit-scrollbar-track,
+#editor::-webkit-scrollbar-track,
+#textTemplate::-webkit-scrollbar-track {
+  background: #1e1e1e;
+  /* track background */
+  border-radius: 10px;
+}
+
+#previewText::-webkit-scrollbar-thumb,
+#editor::-webkit-scrollbar-thumb,
+#textTemplate::-webkit-scrollbar-thumb {
+  background: #555;
+  /* scrollbar handle */
+  border-radius: 10px;
+}
+
+#previewText::-webkit-scrollbar-thumb:hover,
+#editor::-webkit-scrollbar-thumb:hover,
+#textTemplate::-webkit-scrollbar-thumb:hover {
+  background: #999;
+  /* hover effect */
+}
+
+/* Firefox support */
+#previewText,
+#editor,
+#textTemplate {
+  scrollbar-width: thin;
+  scrollbar-color: #555 #1e1e1e;
+  /* thumb | track */
+}
+
+.selected-shortcut-key {
+  text-align: center;
+  font-size: xx-large;
+  font-weight: bold;
+  padding: 5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  background: rgb(255 255 255 / 21%);
+  max-width: 260px;
+}
+
+.selected-shortcut-key:hover {
+  color: #00ffff; /* optional: change text color */
+  text-shadow: 0 0 8px rgb(220, 233, 220), 0 0 15px rgb(231, 239, 240), 0 0 25px #0f0;
+}
+.selected-shortcut-key::placeholder,
+.selected-shortcut-key:hover::placeholder {
+  text-shadow: none !important;
+  color: #888; /* keep it subtle */
+  font-weight: 200 !important;
+  font-size: medium !important;
 }
