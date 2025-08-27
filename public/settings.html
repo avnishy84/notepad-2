@@ -4,23 +4,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>One Notepad</title>
+  <title>Settings - One Editor</title>
   <link rel="icon" href="assets/fav-icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
-<body>
-  <!-- Header with tabs and buttons -->
-  <header>
+<body class="light">
+  <!-- Header will be handled by Header component -->
+  <header class="header-settings">
     <div id="authContainer">
       <!-- Auth buttons -->
       <div id="authButtons">
         <button onclick="openModal('loginPopup')">Login</button>
         <button onclick="openModal('signupPopup')">Signup</button>
       </div>
-
 
       <!-- Logout (hidden until logged in) -->
       <div id="logoutSection" style="display:none;">
@@ -31,16 +30,18 @@
     <div id="tabs"></div>
 
     <div class="actions">
+      <a href="index.html" class="link" title="Editor">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </a>
       <a href="about.html" class="link" title="About">
         <i class="fa fa-info" aria-hidden="true"></i>
       </a>
       <button id="darkToggle">🌙</button>
-      <button id="downloadBtn">⬇️ Download</button>
     </div>
 
     <button class="hamburger" onclick="toggleMenu()">☰</button>
+    
     <!-- Side Panel (Mobile Drawer) -->
-    <!-- Replace the existing side panel with this improved version -->
     <div id="sidePanel" class="side-panel">
       <div class="side-panel-content">
         <button id="closePanelBtn" class="close-panel">✖</button>
@@ -61,47 +62,83 @@
         </div>
       </div>
     </div>
-
   </header>
 
-  <!-- Toolbar -->
-  <main class="main-content">
-    <div id="toolbar">
-      <button onclick="formatText('bold')"><b>B</b></button>
-      <button onclick="formatText('italic')"><i>I</i></button>
-      <button onclick="formatText('underline')"><u>U</u></button>
-      <button onclick="formatText('strikeThrough')"><s>S</s></button>
-      <button onclick="formatText('formatBlock', 'blockquote')">"</button>
-      <button onclick="formatText('formatBlock', 'pre')">{;}</button>
-      <button onclick="formatText('insertOrderedList')">1.</button>
-      <button onclick="formatText('insertUnorderedList')">•</button>
-      <button onclick="formatText('formatBlock', 'h1')">H1</button>
-      <button onclick="formatText('formatBlock', 'h2')">H2</button>
-      <button onclick="decreaseFontSize()" title="Decrease text size">A-</button>
-      <button onclick="increaseFontSize()" title="Increase text size">A+</button>
-      <!-- Improved color picker: hidden input + styled button with icon and swatch -->
-      <input id="fontColorPicker" class="color-picker-input" type="color" title="Text color" onchange="setFontColor(this.value)" />
-      <label for="fontColorPicker" class="color-picker-button" title="Text color">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M12 3a9 9 0 0 0-9 9 6 6 0 0 0 6 6h1.5a1.5 1.5 0 0 1 0 3H9a9 9 0 1 0 3-18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <circle cx="8" cy="10" r="1.5" fill="currentColor"/>
-          <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
-          <circle cx="16" cy="10" r="1.5" fill="currentColor"/>
-          <circle cx="14" cy="14" r="1.5" fill="currentColor"/>
-        </svg>
-        <span id="colorSwatch" class="color-swatch"></span>
-      </label>
-      <button onclick="clearFormatting()">Clear</button>
-    </div>
+  <main>
+    <div class="settings-container">
+      <h1>Settings</h1>
+      
+      <div class="settings-section">
+        <h2>Editor Settings</h2>
+        
+        <div class="setting-item">
+          <label for="defaultFontSize">Default Font Size:</label>
+          <select id="defaultFontSize">
+            <option value="12">12px</option>
+            <option value="14">14px</option>
+            <option value="16" selected>16px</option>
+            <option value="18">18px</option>
+            <option value="20">20px</option>
+          </select>
+        </div>
 
-    <!-- Text editor -->
-    <div id="editor" contenteditable="true" class="editor textarea" placeholder="Start typing..."></div>
+        <div class="setting-item">
+          <label for="autoSave">Auto Save:</label>
+          <input type="checkbox" id="autoSave" checked>
+        </div>
+
+        <div class="setting-item">
+          <label for="spellCheck">Spell Check:</label>
+          <input type="checkbox" id="spellCheck">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2>Appearance</h2>
+        
+        <div class="setting-item">
+          <label for="theme">Theme:</label>
+          <select id="theme">
+            <option value="auto">Auto (System)</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <label for="fontFamily">Font Family:</label>
+          <select id="fontFamily">
+            <option value="Inter" selected>Inter</option>
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2>Account</h2>
+        
+        <div class="setting-item">
+          <label>Email:</label>
+          <span id="userEmail">Not logged in</span>
+        </div>
+
+        <div class="setting-item">
+          <button id="exportData" class="btn-secondary">Export All Data</button>
+        </div>
+
+        <div class="setting-item">
+          <button id="deleteAccount" class="btn-danger">Delete Account</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Footer -->
   <footer>
-    <span id="status">Words: 0 | Chars: 0</span>
-    <div class="mt-2 md:mt-0">Made with ❤️ by Avnish</div>
+    <div></div>
+    <div>Made with ❤️ by Avnish</div>
   </footer>
 
   <!-- Login Modal -->
@@ -124,7 +161,6 @@
     </div>
   </div>
 
-
   <!-- Signup Modal -->
   <div id="signupPopup" class="modal">
     <div class="modal-content auth-box">
@@ -139,23 +175,9 @@
   <!-- Core app logic -->
   <script type="module" src="js/app/main.js"></script>
 
-  <!-- Reusable confirm dialog is created dynamically in js/app.js -->
-
-  <!-- Fallback: ensure global formatting functions exist for inline toolbar buttons -->
-  <script>
-    window.formatText = window.formatText || function (command, value) {
-      try { document.execCommand(command, false, value || null); } catch (e) {}
-      var ed = document.getElementById('editor');
-      if (ed) ed.focus();
-    };
-    window.clearFormatting = window.clearFormatting || function () {
-      try { document.execCommand('removeFormat', false, null); } catch (e) {}
-      var ed = document.getElementById('editor');
-      if (ed) ed.focus();
-    };
-  </script>
-
-  <!-- Inline modal/side-panel logic moved to js/app.js -->
+  <a href="#" class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </a>
 </body>
 
 </html>

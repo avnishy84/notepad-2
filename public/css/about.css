@@ -353,11 +353,11 @@ body.light {
     }
 
     .copy-btn {
-    background: var(--primary);
-    color: white;
+    background: var(--primary) !important;
+    color: rgb(2, 0, 0);
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
-    border: none;
+    border: none !important;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -408,11 +408,11 @@ body.light {
 }
 
 .submit-btn {
-    background: var(--primary);
+    background: var(--primary) !important;
     color: white;
     padding: 1rem;
     border-radius: 0.5rem;
-    border: none;
+    border: none !important;
     cursor: pointer;
     transition: all 0.2s ease;
 }
