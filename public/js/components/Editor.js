@@ -4,13 +4,13 @@ export class Editor {
         this.editor = document.getElementById('editor');
         this.newNoteBtn = document.getElementById('newNoteBtn');
         this.downloadBtn = document.getElementById('downloadBtn');
-        
+
         this.notes = { "Note 1": "" };
         this.deletedNotes = {};
         this.currentNote = Object.keys(this.notes)[0];
-        
+
         this.observer = null;
-        
+
         this.init();
     }
 
@@ -39,12 +39,12 @@ export class Editor {
 
     setupMutationObserver() {
         if (!this.editor) return;
-        
+
         this.observer = new MutationObserver(() => this.updateStatus());
-        this.observer.observe(this.editor, { 
-            childList: true, 
-            characterData: true, 
-            subtree: true 
+        this.observer.observe(this.editor, {
+            childList: true,
+            characterData: true,
+            subtree: true
         });
     }
 
@@ -74,7 +74,7 @@ export class Editor {
         const now = new Date();
         const pad = (num) => num.toString().padStart(2, '0');
         const name = `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-        
+
         if (!this.notes[name]) {
             this.notes[name] = '';
             this.switchNote(name);
@@ -93,11 +93,11 @@ export class Editor {
         }
         this.updateStatus();
         this.saveNotes();
-        
+
         // Update tabs if header component exists
         if (window.header) {
-            window.header.renderTabs(this.notes, this.currentNote, 
-                (name) => this.switchNote(name), 
+            window.header.renderTabs(this.notes, this.currentNote,
+                (name) => this.switchNote(name),
                 (name) => this.closeNote(name)
             );
         }
@@ -108,13 +108,13 @@ export class Editor {
             alert("You can't close the last note!");
             return;
         }
-        
+
         // Confirm if note contains content
         const html = this.notes[name] || "";
         const tmpDiv = document.createElement('div');
         tmpDiv.innerHTML = html;
         const plain = (tmpDiv.textContent || tmpDiv.innerText || "").trim();
-        
+
         if (plain.length > 0) {
             this.showConfirmDialog({
                 title: 'Delete note?',
@@ -149,8 +149,8 @@ export class Editor {
 
         // Update tabs
         if (window.header) {
-            window.header.renderTabs(this.notes, this.currentNote, 
-                (name) => this.switchNote(name), 
+            window.header.renderTabs(this.notes, this.currentNote,
+                (name) => this.switchNote(name),
                 (name) => this.closeNote(name)
             );
         }
@@ -175,7 +175,7 @@ export class Editor {
 
     downloadNote() {
         if (!this.editor) return;
-        
+
         const blob = new Blob([this.editor.innerHTML], { type: 'text/html' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -188,32 +188,32 @@ export class Editor {
         if (this.editor) {
             this.notes[this.currentNote] = this.editor.innerHTML;
         }
-        
+
         // Switch to the selected note
         this.currentNote = noteName;
         if (this.editor) {
             this.editor.innerHTML = this.notes[noteName] || "";
         }
-        
+
         // Update UI
         this.updateStatus();
         this.saveNotes();
-        
+
         // Update tabs
         if (window.header) {
-            window.header.renderTabs(this.notes, this.currentNote, 
-                (name) => this.switchNote(name), 
+            window.header.renderTabs(this.notes, this.currentNote,
+                (name) => this.switchNote(name),
                 (name) => this.closeNote(name)
             );
         }
-        
+
         console.log("Opened note:", noteName);
     }
 
     // Confirm dialog methods
     ensureConfirmDialog() {
         if (document.getElementById('confirmDialogModal')) return;
-        
+
         const modal = document.createElement('div');
         modal.id = 'confirmDialogModal';
         modal.className = 'modal';
@@ -233,14 +233,14 @@ export class Editor {
 
         const cancelBtn = modal.querySelector('#confirmDialogCancel');
         const okBtn = modal.querySelector('#confirmDialogOk');
-        
+
         cancelBtn.addEventListener('click', () => {
             modal.style.display = 'none';
             const resolver = modal.__resolver;
             if (resolver) resolver(false);
             modal.__resolver = null;
         });
-        
+
         okBtn.addEventListener('click', () => {
             modal.style.display = 'none';
             const resolver = modal.__resolver;
@@ -254,13 +254,13 @@ export class Editor {
         const { title = 'Confirm', message = 'Are you sure?', okText = 'OK', cancelText = 'Cancel' } = options;
         const modal = document.getElementById('confirmDialogModal');
         if (!modal) return Promise.resolve(false);
-        
+
         modal.querySelector('#confirmDialogTitle').textContent = title;
         modal.querySelector('#confirmDialogMessage').textContent = message;
         modal.querySelector('#confirmDialogOk').textContent = okText;
         modal.querySelector('#confirmDialogCancel').textContent = cancelText;
         modal.style.display = 'flex';
-        
+
         return new Promise((resolve) => {
             modal.__resolver = resolve;
         });
@@ -269,7 +269,7 @@ export class Editor {
     // Save/Load methods
     async saveNotes() {
         if (!window.auth || !window.auth.currentUser || !window.db) return;
-        
+
         try {
             await window.setDoc(window.doc(window.db, "users", window.auth.currentUser.uid), {
                 notes: this.notes
@@ -282,7 +282,7 @@ export class Editor {
 
     async loadNotes(uid) {
         if (!window.db) return;
-        
+
         try {
             const docRef = window.doc(window.db, "users", uid);
             const docSnap = await window.getDoc(docRef);
@@ -290,9 +290,21 @@ export class Editor {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 if (data.notes && Object.keys(data.notes).length > 0) {
-                    this.notes = data.notes;
+                    // Sort notes by key (alphabetically)
+                    const noteNames = Object.keys(data.notes).filter(key => !key.endsWith('_updateTime'));
+                    const sortedNoteNames = noteNames.sort();
+
+                    const sortedNotes = {};
+                    sortedNoteNames.forEach(name => {
+                        sortedNotes[name] = data.notes[name];
+                        if (data.notes[name + '_updateTime']) {
+                            sortedNotes[name + '_updateTime'] = data.notes[name + '_updateTime'];
+                        }
+                    });
+
+                    this.notes = sortedNotes;
                     this.deletedNotes = data.deletedNotes || {};
-                    this.currentNote = Object.keys(this.notes)[0];
+                    this.currentNote = sortedNoteNames[sortedNoteNames.length - 1] || "Note 1"; // Select last alphabetically
                     if (this.editor) {
                         this.editor.innerHTML = this.notes[this.currentNote];
                     }
@@ -314,8 +326,8 @@ export class Editor {
 
             // Update UI
             if (window.header) {
-                window.header.renderTabs(this.notes, this.currentNote, 
-                    (name) => this.switchNote(name), 
+                window.header.renderTabs(this.notes, this.currentNote,
+                    (name) => this.switchNote(name),
                     (name) => this.closeNote(name)
                 );
             }
@@ -332,10 +344,10 @@ export class Editor {
         if (this.editor) {
             this.editor.innerHTML = this.notes[this.currentNote];
         }
-        
+
         if (window.header) {
-            window.header.renderTabs(this.notes, this.currentNote, 
-                (name) => this.switchNote(name), 
+            window.header.renderTabs(this.notes, this.currentNote,
+                (name) => this.switchNote(name),
                 (name) => this.closeNote(name)
             );
         }
