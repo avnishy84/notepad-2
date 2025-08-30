@@ -508,7 +508,7 @@ body.dark .editor {
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 0;
-  width: 500px;
+  width: auto;
   max-width: 90%;
   text-align: center;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
@@ -618,6 +618,7 @@ body.dark .editor {
 }
 
 .game-instructions {
+  display: none;
   margin-top: 15px;
   padding: 15px;
   background: rgba(255, 255, 255, 0.08);

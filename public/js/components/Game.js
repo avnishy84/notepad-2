@@ -19,7 +19,7 @@ export class Game {
         this.particles = [];
         this.effects = [];
         this.gridSize = 20;
-        this.canvasSize = 400;
+        this.canvasSize = 600;
         this.powerUpChance = 0.1; // 10% chance for power-up
         this.powerUpTypes = ['speed', 'slow', 'double', 'ghost', 'shrink'];
         this.activePowerUps = {};
@@ -55,7 +55,7 @@ export class Game {
                                 <option value="hard">Hard</option>
                             </select>
                         </div>
-                        <canvas id="gameCanvas" width="400" height="400"></canvas>
+                        <canvas id="gameCanvas" width="600" height="600"></canvas>
                         <div class="game-controls">
                             <button id="startGameBtn" onclick="window.game.startGame()">Start Game</button>
                             <button id="pauseGameBtn" onclick="window.game.pauseGame()" style="display: none;">Pause</button>
