@@ -6,6 +6,7 @@ import { Editor } from '../components/Editor.js';
 import { Auth } from '../components/Auth.js';
 import { About } from '../components/About.js';
 import { Settings } from '../components/Settings.js';
+import { Game } from '../components/Game.js';
 
 class App {
     constructor() {
@@ -28,6 +29,7 @@ class App {
         this.components.header = new Header();
         this.components.footer = new Footer();
         this.components.toolbar = new Toolbar();
+        this.components.game = new Game();
 
         // Initialize page-specific components
         if (this.isEditorPage()) {
@@ -50,6 +52,7 @@ class App {
         window.editor = this.components.editor;
         window.about = this.components.about;
         window.settings = this.components.settings;
+        window.game = this.components.game;
     }
 
     setupComponentCommunication() {
@@ -82,6 +85,13 @@ class App {
         window.clearFormatting = window.clearFormatting || function () {
             if (window.toolbar) {
                 window.toolbar.clearFormatting();
+            }
+        };
+
+        // Expose toggleMenu function for mobile menu
+        window.toggleMenu = function() {
+            if (window.header) {
+                window.header.toggleMenu();
             }
         };
     }

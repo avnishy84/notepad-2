@@ -655,3 +655,210 @@ body.light {
     .feature-card:nth-child(5) {
         animation-delay: 0.5s;
     }
+
+    /* Shortcuts Section */
+    .shortcuts-section {
+        background: var(--bg-glass);
+        padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin: 3rem 0;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .shortcuts-section h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+        text-align: center;
+    }
+
+    .shortcuts-section p {
+        text-align: center;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    .shortcuts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .shortcut-category {
+        background: var(--bg-glass-light);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid var(--border);
+    }
+
+    .shortcut-category h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+        text-align: center;
+    }
+
+    .shortcut-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .shortcut-item:last-child {
+        border-bottom: none;
+    }
+
+    .shortcut-key {
+        background: var(--primary);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.5rem;
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .shortcut-desc {
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    /* Game Section */
+    .game-section {
+        background: var(--bg-glass);
+        padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin: 3rem 0;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .game-section h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+        text-align: center;
+    }
+
+    .game-section p {
+        text-align: center;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    .game-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .game-feature {
+        background: var(--bg-glass-light);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid var(--border);
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .game-feature:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+
+    .game-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .game-feature h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+
+    .game-feature p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    /* Auth Section */
+    .auth-section {
+        background: var(--bg-glass);
+        padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin: 3rem 0;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .auth-section h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+        text-align: center;
+    }
+
+    .auth-section p {
+        text-align: center;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    .auth-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .auth-feature {
+        background: var(--bg-glass-light);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid var(--border);
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .auth-feature:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+
+    .auth-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .auth-feature h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+
+    .auth-feature p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        margin: 0;
+    }

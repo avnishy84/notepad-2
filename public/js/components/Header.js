@@ -10,6 +10,7 @@ export class Header {
         this.sidePanel = document.getElementById('sidePanel');
         this.darkToggle = document.getElementById('darkToggle');
         this.downloadBtn = document.getElementById('downloadBtn');
+        this.gameBtn = document.getElementById('gameBtn');
         this.newNoteBtn = document.getElementById('newNoteBtn');
         
         this.init();
@@ -25,6 +26,11 @@ export class Header {
         // Dark mode toggle
         if (this.darkToggle) {
             this.darkToggle.addEventListener('click', () => this.toggleDarkMode());
+        }
+
+        // Game button
+        if (this.gameBtn) {
+            this.gameBtn.addEventListener('click', () => this.openGame());
         }
 
         // Mobile menu
@@ -90,6 +96,17 @@ export class Header {
                 this.toggleMenu();
             });
         }
+
+        // Link game button
+        const gameBtnMobile = document.getElementById('gameBtnMobile');
+        if (gameBtnMobile && this.gameBtn) {
+            gameBtnMobile.addEventListener('click', () => {
+                this.openGame();
+                this.toggleMenu();
+            });
+        }
+
+
 
         // Link logout button
         const logoutBtnMobile = document.getElementById('logoutBtnMobile');
@@ -158,6 +175,14 @@ export class Header {
             if (this.logoutSection) this.logoutSection.style.display = 'none';
         }
     }
+
+    openGame() {
+        if (window.game && window.game.openGame) {
+            window.game.openGame();
+        }
+    }
+
+
 
     renderTabs(notes, currentNote, onSwitchNote, onCloseNote) {
         if (!this.tabsContainer) return;

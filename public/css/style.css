@@ -500,6 +500,239 @@ body.dark .editor {
   background: rgba(255, 255, 255, 0.15);
 }
 
+/* Game Modal Styles */
+.game-box {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0;
+  width: 500px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.3s ease;
+  position: relative;
+  user-select: none;
+}
+
+.game-header {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 18px 18px 0 0;
+  padding: 20px 28px 15px 28px;
+  cursor: grab;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.game-header:active {
+  cursor: grabbing;
+}
+
+.game-header .popup-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  z-index: 10;
+}
+
+.game-header .popup-close-btn:hover {
+  color: #ff6b6b;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 50%;
+  right: 50px;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: bold;
+  cursor: grab;
+  user-select: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.game-content {
+  padding: 20px 28px 28px 28px;
+}
+
+.game-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#gameCanvas {
+  border-radius: 8px;
+  margin: 15px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.game-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 15px 0;
+  flex-wrap: wrap;
+}
+
+.game-controls button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(74, 144, 226, 0.8);
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.game-controls button:hover {
+  background: rgba(74, 144, 226, 1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.game-instructions {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  text-align: left;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.game-instructions p {
+  margin: 5px 0;
+}
+
+.game-instructions strong {
+  color: #4facfe;
+}
+
+/* Dark mode adjustments for game */
+body.dark .game-box {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .game-header {
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark .game-instructions {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.difficulty-selector {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.difficulty-selector label {
+  color: var(--text-secondary);
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.difficulty-selector select {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficulty-selector select:hover {
+  border-color: var(--border-light);
+  background: var(--bg-glass-hover);
+}
+
+.power-up-info {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.power-up-info h4 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.power-up-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.power-up-item {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.power-up-item:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--border-light);
+}
+
+#gameLevel {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Draggable game window styles */
+.game-box {
+  transition: transform 0.1s ease-out;
+}
+
+.game-box:active {
+  transition: none;
+}
+
+/* Prevent text selection during drag */
+.game-header * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 .auth-btn {
   width: 100%;
   background: linear-gradient(135deg, #4facfe, #00f2fe);
