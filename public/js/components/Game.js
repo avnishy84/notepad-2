@@ -938,7 +938,9 @@ export class Game {
         `;
         document.getElementById('gameBox').appendChild(overlay);
     }
-
+    updateScore() {
+        document.getElementById('gameScore').textContent = `Score: ${this.score}`;
+    }
 
     createGameOverEffect() {
         // Create explosion effect
