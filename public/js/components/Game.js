@@ -45,7 +45,7 @@ export class Game {
                     <div>
                         <canvas id="gameCanvas" width="400" height="400"></canvas>
                     </div>
-                    <div>
+                    <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-evenly;">
                         <div class="game-info">
                             <span id="gameScore">Score: 0</span>
                             <span id="gameLevel">Level: 1</span>
@@ -65,6 +65,13 @@ export class Game {
                             <button id="pauseGameBtn" onclick="window.game.pauseGame()" style="display: none;">Pause</button>
                             <button onclick="window.game.resetGame()">Reset</button>
                         </div>
+                        <div class="game-instructions">
+                            <p><strong>Controls:</strong></p>
+                            <p>Use arrow keys or WASD to move the snake</p>
+                            <p>Eat food to grow and collect power-ups!</p>
+                            <p>Avoid hitting walls or yourself</p>
+                            <p><em>💡 Tip: Drag the header to move the window</em></p>
+                        </div>
                         <div class="power-up-info">
                             <h4>Power-ups:</h4>
                             <div class="power-up-list">
@@ -74,13 +81,6 @@ export class Game {
                                 <span class="power-up-item">👻 Ghost</span>
                                 <span class="power-up-item">📏 Shrink</span>
                             </div>
-                        </div>
-                        <div class="game-instructions">
-                            <p><strong>Controls:</strong></p>
-                            <p>Use arrow keys or WASD to move the snake</p>
-                            <p>Eat food to grow and collect power-ups!</p>
-                            <p>Avoid hitting walls or yourself</p>
-                            <p><em>💡 Tip: Drag the header to move the window</em></p>
                         </div>
                     </div>
                     </div>
