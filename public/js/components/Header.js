@@ -12,7 +12,7 @@ export class Header {
         this.downloadBtn = document.getElementById('downloadBtn');
         this.gameBtn = document.getElementById('gameBtn');
         this.newNoteBtn = document.getElementById('newNoteBtn');
-        
+
         this.init();
     }
 
@@ -120,7 +120,7 @@ export class Header {
 
     toggleMenu() {
         if (!this.sidePanel) return;
-        
+
         this.sidePanel.classList.toggle('open');
 
         const panelButtons = document.getElementById('sidePanelButtons');
@@ -186,9 +186,9 @@ export class Header {
 
     renderTabs(notes, currentNote, onSwitchNote, onCloseNote) {
         if (!this.tabsContainer) return;
-        
+
         this.tabsContainer.innerHTML = '';
-        
+
         Object.keys(notes).forEach(name => {
             const tab = document.createElement('div');
             tab.className = 'tab' + (name === currentNote ? ' active' : '');

@@ -236,7 +236,7 @@ export class Toolbar {
         dialog.className = 'modal shortcut-modal';
         dialog.style.display = 'flex';
         dialog.innerHTML = `
-            <div class="popup-content" style="max-width: 500px;">
+            <div id="popup-content" class="popup-content" style="max-width: 500px;">
                 <h3>Create Custom Shortcut</h3>
                 <div style="display: flex; flex-direction: column; margin: 10px 0;">
                     <label>Shortcut Key:</label>

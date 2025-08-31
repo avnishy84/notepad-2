@@ -1,0 +1,53 @@
+.neon-theme {
+    font-family: 'Orbitron', sans-serif;
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    background: #000814;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.game-title {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.score-panel {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.score-box {
+    border: 2px solid #0ff;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100px;
+    box-shadow: 0 0 15px #0ff;
+}
+
+button {
+    background: transparent;
+    border: 2px solid #0ff;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    color: #0ff;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-shadow: 0 0 10px #0ff;
+    box-shadow: 0 0 15px #0ff;
+    transition: all 0.2s;
+}
+button:hover {
+    background: #0ff;
+    color: #000;
+}
+button:active {
+    box-shadow: 0 0 5px #0ff;
+    transform: scale(0.95);
+}

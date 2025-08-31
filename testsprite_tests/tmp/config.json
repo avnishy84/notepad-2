@@ -1,0 +1,9 @@
+{
+  "status": "init",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5000",
+  "loginUser": "test@notepad.com",
+  "loginPassword": "notepad",
+  "serverPort": 60119
+}

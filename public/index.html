@@ -34,8 +34,8 @@
       <a href="about.html" class="link" title="About">
         <i class="fa fa-info" aria-hidden="true"></i>
       </a>
-                  <button id="gameBtn" title="Play Snake Game">🎮</button>
-            <button id="darkToggle">🌙</button>
+      <button id="gameBtn" title="Play Snake Game">🎮</button>
+      <button id="darkToggle">🌙</button>
       <button id="downloadBtn">⬇️ Download</button>
     </div>
 
@@ -56,8 +56,8 @@
       <!-- Bottom actions section -->
       <div class="side-panel-bottom-actions">
         <div class="bottom-actions-container">
-                      <button id="gameBtnMobile">🎮</button>
-            <button id="darkToggleMobile">🌙</button>
+          <button id="gameBtnMobile">🎮</button>
+          <button id="darkToggleMobile">🌙</button>
           <button id="downloadBtnMobile">⬇️ Download</button>
           <button id="logoutBtnMobile">Logout</button>
         </div>
@@ -82,18 +82,22 @@
       <button onclick="decreaseFontSize()" title="Decrease text size">A-</button>
       <button onclick="increaseFontSize()" title="Increase text size">A+</button>
       <!-- Improved color picker: hidden input + styled button with icon and swatch -->
-      <input id="fontColorPicker" class="color-picker-input" type="color" title="Text color" onchange="setFontColor(this.value)" />
+      <input id="fontColorPicker" class="color-picker-input" type="color" title="Text color"
+        onchange="setFontColor(this.value)" />
       <label for="fontColorPicker" class="color-picker-button" title="Text color">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M12 3a9 9 0 0 0-9 9 6 6 0 0 0 6 6h1.5a1.5 1.5 0 0 1 0 3H9a9 9 0 1 0 3-18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <circle cx="8" cy="10" r="1.5" fill="currentColor"/>
-          <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
-          <circle cx="16" cy="10" r="1.5" fill="currentColor"/>
-          <circle cx="14" cy="14" r="1.5" fill="currentColor"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true">
+          <path d="M12 3a9 9 0 0 0-9 9 6 6 0 0 0 6 6h1.5a1.5 1.5 0 0 1 0 3H9a9 9 0 1 0 3-18Z" stroke="currentColor"
+            stroke-width="1.5" fill="none" />
+          <circle cx="8" cy="10" r="1.5" fill="currentColor" />
+          <circle cx="12" cy="8" r="1.5" fill="currentColor" />
+          <circle cx="16" cy="10" r="1.5" fill="currentColor" />
+          <circle cx="14" cy="14" r="1.5" fill="currentColor" />
         </svg>
         <span id="colorSwatch" class="color-swatch"></span>
       </label>
-      <button onclick="window.toolbar.showCustomShortcutDialog()" title="Create Custom Shortcut (Ctrl+Shift+S)">⚡</button>
+      <button onclick="window.toolbar.showCustomShortcutDialog()"
+        title="Create Custom Shortcut (Ctrl+Shift+S)">⚡</button>
       <button onclick="clearFormatting()">Clear</button>
     </div>
 
@@ -147,12 +151,12 @@
   <!-- Fallback: ensure global formatting functions exist for inline toolbar buttons -->
   <script>
     window.formatText = window.formatText || function (command, value) {
-      try { document.execCommand(command, false, value || null); } catch (e) {}
+      try { document.execCommand(command, false, value || null); } catch (e) { }
       var ed = document.getElementById('editor');
       if (ed) ed.focus();
     };
     window.clearFormatting = window.clearFormatting || function () {
-      try { document.execCommand('removeFormat', false, null); } catch (e) {}
+      try { document.execCommand('removeFormat', false, null); } catch (e) { }
       var ed = document.getElementById('editor');
       if (ed) ed.focus();
     };
