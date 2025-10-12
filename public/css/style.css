@@ -345,6 +345,14 @@ body.dark .editor {
   color: var(--text);
 }
 
+.editor:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+body.dark .editor:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .editor:empty:before {
   content: attr(placeholder);
   color: #aaa;
@@ -353,51 +361,349 @@ body.dark .editor {
 
 
 
-/* Toolbar container */
-#toolbar {
-  display: flex;
-  gap: 8px;
-  padding: 10px;
-  background: #1e1e1e;
-  /* Dark background */
-  border-bottom: 1px solid #333;
-}
-
-/* Modern button styling */
-#toolbar button {
-  background: #2a2a2a;
-  color: #f5f5f5;
+/* Format Toggle Button */
+.format-toggle-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1002;
+  background: rgba(74, 144, 226, 0.9);
+  backdrop-filter: blur(20px);
   border: none;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-family: 'Inter', sans-serif;
+  border-radius: 25px;
+  padding: 12px 20px;
+  color: white;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  gap: 8px;
   font-size: 14px;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(74, 144, 226, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
-/* Hover effect */
-#toolbar button:hover {
-  background: #3b3b3b;
+.format-toggle-btn.show {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.format-toggle-btn:hover {
+  background: rgba(74, 144, 226, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(74, 144, 226, 0.4);
+}
+
+.format-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.format-toggle-btn i {
+  font-size: 16px;
+}
+
+/* Desktop Toolbar */
+.desktop-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 15px;
+  background: var(--bg);
+  backdrop-filter: var(--bg-blur);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  align-items: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.desktop-toolbar.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.desktop-toolbar.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.desktop-toolbar .toolbar-btn {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.desktop-toolbar .toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
 }
 
-/* Active/pressed effect */
-#toolbar button:active {
-  background: #555;
-  transform: scale(0.97);
+.desktop-toolbar .toolbar-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Special highlight for Clear button */
-#toolbar button:last-child {
-  background: #ff4d4d;
+/* Mobile Floating Toolbar */
+.mobile-toolbar {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.mobile-toolbar.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-toolbar.hidden {
+  transform: translateX(-50%) translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.mobile-toolbar-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.mobile-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
   color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 18px;
+  position: relative;
 }
 
-#toolbar button:last-child:hover {
-  background: #ff6666;
+.mobile-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.mobile-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.mobile-btn.more-btn {
+  background: rgba(74, 144, 226, 0.8);
+}
+
+.mobile-btn.more-btn:hover {
+  background: rgba(74, 144, 226, 1);
+}
+
+/* Mobile More Options Popup */
+.mobile-more-popup {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 320px;
+  width: 90vw;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.mobile-more-popup.show {
+  display: block;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.more-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.more-section h4 {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.more-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 12px;
+}
+
+.more-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  min-height: 60px;
+}
+
+.more-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.more-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.more-btn i {
+  font-size: 20px;
+}
+
+.more-btn .btn-text {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Color Picker Styles */
+.color-picker-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.color-picker-btn {
+  position: relative;
+}
+
+.color-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #000;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  margin-top: 4px;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .desktop-toolbar {
+    display: none;
+  }
+  
+  .mobile-toolbar {
+    display: block;
+  }
+  
+  .format-toggle-btn {
+    top: 15px;
+    right: 15px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .format-toggle-btn i {
+    font-size: 14px;
+  }
+  
+  /* Add bottom padding to editor to account for floating toolbar when shown */
+  .main-content {
+    padding-bottom: 0;
+  }
+  
+  .main-content.toolbar-visible {
+    padding-bottom: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-toolbar {
+    bottom: 15px;
+    padding: 6px;
+  }
+  
+  .mobile-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+  
+  .mobile-more-popup {
+    bottom: 80px;
+    padding: 15px;
+    max-width: 300px;
+  }
+  
+  .more-buttons {
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 10px;
+  }
+  
+  .more-btn {
+    padding: 10px 6px;
+    min-height: 55px;
+  }
+  
+  .more-btn i {
+    font-size: 18px;
+  }
 }
 
 /* Popup modal styles */
