@@ -7,10 +7,15 @@ Perfect for quick note-taking, accessible from any device.
 
 ## 🚀 Features
 - Create, edit, and delete notes
-- Automatically saves notes locally in your browser
-- Works offline
+- **Read Only Mode** - View and read saved documents without editing
+- Automatically saves notes to cloud storage when logged in
+- Works offline with local storage
+- User authentication with email/password and Google Sign-In
 - Lightweight and fast
 - Accessible on desktop and mobile
+- Rich text formatting with toolbar
+- Dark mode support
+- Built-in Snake game for breaks
 
 ---
 
@@ -21,17 +26,28 @@ Perfect for quick note-taking, accessible from any device.
 ## 📂 Project Structure
 notepad-2/
 │
-├── index.html # Main app interface
-├── style.css # Styles for the app
-├── script.js # Core logic for note management
+├── public/
+│   ├── index.html # Main editor interface
+│   ├── readonly.html # Read-only document viewer
+│   ├── about.html # About page
+│   ├── settings.html # Settings page
+│   ├── css/ # Stylesheets
+│   └── js/
+│       ├── app/ # Main application logic
+│       ├── components/ # Modular components
+│       └── firebase/ # Firebase configuration
+├── firestore.rules # Database security rules
+├── firebase.json # Firebase configuration
 └── README.md # Project documentation
 ---
 
 ## 🛠 How to Use
 1. Open the [Live Demo link](https://notepad-2-e34b1.web.app/index.html).
-2. Start typing your notes in the editor.
-3. Notes are automatically saved in your browser.
-4. Access the app anytime on any device with the same URL.
+2. **Sign up or log in** to save your notes to the cloud.
+3. Start typing your notes in the editor with rich text formatting.
+4. Notes are automatically saved to your account.
+5. Use the **Read Only mode** (👁️ icon) to view saved documents without editing.
+6. Access your notes from any device when logged in.
 
 ---
 
@@ -44,9 +60,10 @@ git clone https://github.com/avnishy84/notepad-2.git
 # Open the folder
 cd notepad-2
 
-# Open the app in your browser
-firebase serve   # Windows
-open index.html    # macOS
+# Run locally (choose one):
+firebase serve                    # Using Firebase CLI
+python -m http.server 8000       # Using Python (from public/ folder)
+# Then open http://localhost:8000 in your browser
 
 📜 License
 

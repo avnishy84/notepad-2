@@ -7,6 +7,7 @@ import { Auth } from '../components/Auth.js';
 import { About } from '../components/About.js';
 import { Settings } from '../components/Settings.js';
 import { Game } from '../components/Game.js';
+import { Readonly } from '../components/Readonly.js';
 
 class App {
     constructor() {
@@ -44,6 +45,10 @@ class App {
             this.components.settings = new Settings();
         }
 
+        if (this.isReadonlyPage()) {
+            this.components.readonly = new Readonly();
+        }
+
         // Expose components to global scope for cross-component communication
         window.auth = this.components.auth;
         window.header = this.components.header;
@@ -53,6 +58,7 @@ class App {
         window.about = this.components.about;
         window.settings = this.components.settings;
         window.game = this.components.game;
+        window.readonly = this.components.readonly;
     }
 
     setupComponentCommunication() {
@@ -110,6 +116,11 @@ class App {
     isSettingsPage() {
         return window.location.pathname === '/settings.html' ||
                window.location.pathname.endsWith('settings.html');
+    }
+
+    isReadonlyPage() {
+        return window.location.pathname === '/readonly.html' ||
+               window.location.pathname.endsWith('readonly.html');
     }
 }
 
