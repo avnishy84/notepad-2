@@ -74,11 +74,6 @@ export class Auth {
                 if (window.editor) {
                     window.editor.loadNotes(user.uid);
                 }
-
-                // Refresh readonly documents
-                if (window.readonly) {
-                    window.readonly.refreshDocuments();
-                }
             } else {
                 // User is logged out
                 if (window.header) {
@@ -89,11 +84,6 @@ export class Auth {
                 // Reset local notes when logged out
                 if (window.editor) {
                     window.editor.resetNotes();
-                }
-
-                // Clear readonly documents when logged out
-                if (window.readonly) {
-                    window.readonly.clearDocuments();
                 }
             }
         });
