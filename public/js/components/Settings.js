@@ -17,6 +17,7 @@ export class Settings {
         this.loadSettings();
         this.setupEventListeners();
         this.updateUserInfo();
+        this.setupAuthListener();
     }
 
     setupEventListeners() {
@@ -162,6 +163,29 @@ export class Settings {
                 this.userEmail.textContent = 'Not logged in';
             }
         }
+    }
+
+    setupAuthListener() {
+        // Wait for auth to be available and set up listener
+        const checkAuth = () => {
+            if (window.onAuthStateChanged && window.auth) {
+                window.onAuthStateChanged(window.auth, (user) => {
+                    if (user) {
+                        if (this.userEmail) {
+                            this.userEmail.textContent = user.email;
+                        }
+                    } else {
+                        if (this.userEmail) {
+                            this.userEmail.textContent = 'Not logged in';
+                        }
+                    }
+                });
+            } else {
+                // Retry after a short delay if auth is not ready yet
+                setTimeout(checkAuth, 100);
+            }
+        };
+        checkAuth();
     }
 
     async exportAllData() {
