@@ -70,11 +70,6 @@ export class Auth {
                     window.editor.currentUser = user;
                     window.editor.loadNotes(user.uid);
                 }
-
-                // Refresh readonly documents
-                if (window.readonly) {
-                    window.readonly.refreshDocuments();
-                }
             } else {
                 if (window.header) window.header.updateAuthState(null);
                 console.log("No user logged in");
@@ -82,11 +77,6 @@ export class Auth {
                 if (window.editor) {
                     window.editor.currentUser = null;
                     window.editor.resetNotes();
-                }
-
-                // Clear readonly documents when logged out
-                if (window.readonly) {
-                    window.readonly.clearDocuments();
                 }
             }
         });
