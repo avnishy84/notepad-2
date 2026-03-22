@@ -40,84 +40,99 @@ header {
   backdrop-filter: var(--bg-blur);
   background: var(--bg);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000;
-  /* Ensure header is on top */
-  flex-shrink: 0;
+  padding: 8px 14px;
+  gap: 10px;
+}
+
+.header-tabs-row {
+  display: flex;
+  align-items: center;
+  padding: 0 14px 8px 14px;
+  gap: 6px;
+  overflow: hidden;
+}
+
+/* Hamburger always visible */
+.hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
 }
 
 /* ---- TABS ---- */
 #tabs {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 5px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 2px;
+}
+
+#tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tab {
   padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.05);
-  /* frosted transparency */
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  font-size: 14px;
-  color: white;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  /* classy soft shadow */
-  box-shadow:
-    2px 2px 6px rgba(0, 0, 0, 0.4),
-    -2px -2px 6px rgba(255, 255, 255, 0.1) inset;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
 .tab:hover {
   background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
-  box-shadow:
-    3px 3px 10px rgba(0, 0, 0, 0.5),
-    -2px -2px 6px rgba(255, 255, 255, 0.15) inset;
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
 }
 
 .tab.active {
-  background: rgba(74, 144, 226, 0.2);
-  /* transparent blue glass */
-  border: 1px solid rgba(74, 144, 226, 0.4);
+  background: rgba(74, 144, 226, 0.25);
+  border: 1px solid rgba(74, 144, 226, 0.5);
   color: #fff;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  /* Glow effect */
-  box-shadow:
-    0 0 12px rgba(74, 144, 226, 0.7),
-    /* outer glow */
-    inset 0 0 6px rgba(255, 255, 255, 0.2);
-  /* inner highlight */
-
-  transform: translateY(-1px);
-  /* subtle lift */
-  transition: all 0.3s ease;
-}
-
-body.dark tab {
-  color: var(--text);
+  box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
 }
 
 /* ---- CLOSE BUTTON ---- */
 .close-btn {
-  font-size: 12px;
+  font-size: 11px;
   background: transparent;
   border: none;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
+  padding: 0;
+  line-height: 1;
   transition: color 0.2s ease;
 }
 
@@ -125,41 +140,49 @@ body.dark tab {
   color: #ff5c5c;
 }
 
-/* ---- BUTTONS ---- */
-button {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.tab.add-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  padding: 5px 10px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tab.add-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
-  padding: 6px 12px;
-  font-size: 14px;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ---- BUTTONS (global base) ---- */
+button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  font-size: 13px;
   font-weight: 500;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  /* Classy soft shadow */
-  box-shadow:
-    2px 2px 6px rgba(0, 0, 0, 0.15),
-    -2px -2px 6px rgba(255, 255, 255, 0.4) inset;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 button:hover {
-  background: rgba(255, 255, 255, 1);
-  border-color: rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-  /* slight lift */
-  box-shadow:
-    4px 4px 12px rgba(0, 0, 0, 0.2),
-    -2px -2px 6px rgba(255, 255, 255, 0.3) inset;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
 }
 
 button:active {
-  transform: translateY(0);
-  box-shadow:
-    inset 2px 2px 6px rgba(0, 0, 0, 0.25),
-    inset -2px -2px 6px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ---- HEADER ACTION BUTTONS ---- */
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
 /* DARK MODE BUTTONS */
@@ -209,30 +232,6 @@ footer {
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #111;
-  padding: 10px;
-  position: relative;
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
-/* Hamburger hidden on large screens */
-.hamburger {
-  display: none;
-  font-size: 22px;
-  background: none;
-  border: none;
-  color: var(--text);
-  cursor: pointer;
-}
-
-header {
   position: relative;
   z-index: 2000;
 }
@@ -267,37 +266,11 @@ header {
 }
 
 
-/* On small screens: hide actions, show hamburger */
-@media (max-width: 600px) {
-  .actions {
-    display: none;
-  }
-
-  .hamburger {
-    display: inline-block;
-  }
-}
-
-.tab.add-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  cursor: pointer;
-  padding: 4px 10px;
-  border: 1px solid #444;
-  box-shadow:
-    2px 2px 6px rgba(0, 0, 0, 0.15),
-    -2px -2px 6px rgba(255, 255, 255, 0.4) inset;
-}
-
-/* body.dark .add-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-} */
 
 .tab.add-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .subscript {
@@ -317,10 +290,6 @@ header {
   /* optional red tint on hover */
   text-shadow: 0 0 8px rgba(245, 223, 223, 0.9),
     0 0 12px rgba(245, 223, 223, 0.9);
-}
-
-#newNoteBtn {
-  display: none;
 }
 
 .editor {
@@ -1162,29 +1131,23 @@ body.dark .game-instructions {
   background: #555;
 }
 
-/* Default (desktop) */
+/* Side panel hidden by default, shown when open class is added */
 #sidePanel {
   display: none;
 }
 
-header .actions,
-#tabs,
-#newNoteBtn {
+#sidePanel.open {
+  display: block;
+}
+
+#tabs {
   display: flex;
 }
 
 /* Mobile view */
 @media (max-width: 768px) {
-
-  header .actions,
-  #tabs,
-  #newNoteBtn {
+  #tabs {
     display: none;
-  }
-
-  #sidePanel.open {
-    display: block;
-    /* show drawer */
   }
 }
 
@@ -1204,66 +1167,6 @@ header .actions,
   background: #f0f0f0;
 }
 
-.side-panel {
-  position: fixed;
-  top: 0;
-  right: -300px;
-  width: 300px;
-  height: 100%;
-  background: white;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: right 0.3s ease;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-}
-
-.side-panel.open {
-  right: 0;
-}
-
-.side-panel-content {
-  padding: 20px;
-  flex: 1;
-  overflow-y: auto;
-}
-
-.close-panel {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.doc-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.doc-item {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-}
-
-.doc-item:hover {
-  background: #f5f5f5;
-}
-
-.side-panel-bottom-actions {
-  padding: 1rem;
-  border-top: 1px solid #eee;
-}
-
-.bottom-actions-container {
-  display: flex;
-  justify-content: space-around;
-}
-
 /* Dark mode support */
 .dark .side-panel {
   background: #333;
@@ -1278,8 +1181,113 @@ header .actions,
   background: #444;
 }
 
-.dark .side-panel-bottom-actions {
-  border-top: 1px solid #555;
+/* ---- SIDE PANEL SECTIONS ---- */
+
+/* Make panel scrollable */
+#sidePanel {
+  overflow-y: auto;
+}
+
+/* Each section block */
+.panel-section {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.panel-section:last-child {
+  border-bottom: none;
+}
+
+/* Section labels */
+.panel-section-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 10px;
+}
+
+/* Auth section */
+#sidePanelLoggedOut,
+#sidePanelLoggedIn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel-email {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  word-break: break-all;
+  padding: 4px 0;
+}
+
+/* Nav links */
+.panel-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.panel-nav-link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.15s ease, color 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.panel-nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* Action buttons */
+.panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel-actions button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* New note button */
+.panel-new-note-btn {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  background: rgba(74, 144, 226, 0.2);
+  border: 1px solid rgba(74, 144, 226, 0.35);
+  color: #7db8f5;
+}
+
+.panel-new-note-btn:hover {
+  background: rgba(74, 144, 226, 0.35);
+  border-color: rgba(74, 144, 226, 0.55);
+  color: #fff;
+}
+
+/* Doc list empty state */
+.doc-empty-state {
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 13px;
+  font-style: italic;
+  list-style: none;
 }
 
 .popup-content {
@@ -1357,19 +1365,6 @@ body.color-picking .editor *::selection {
 body.color-picking .editor *::-moz-selection {
   background: rgba(128, 128, 128, 0.18) !important;
   color: inherit !important;
-}
-
-/* Info icon link styling */
-.link {
-  display: flex;
-  align-items: center;
-  color: white;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.link:hover {
-  color: var(--accent);
 }
 
 /* Custom scrollbar only for #editor */

@@ -1,16 +1,9 @@
 // Header Component
 export class Header {
     constructor() {
-        this.authContainer = document.getElementById('authContainer');
-        this.authButtons = document.getElementById('authButtons');
-        this.logoutSection = document.getElementById('logoutSection');
         this.tabsContainer = document.getElementById('tabs');
-        this.actions = document.querySelector('.actions');
         this.hamburger = document.querySelector('.hamburger');
         this.sidePanel = document.getElementById('sidePanel');
-        this.darkToggle = document.getElementById('darkToggle');
-        this.downloadBtn = document.getElementById('downloadBtn');
-        this.gameBtn = document.getElementById('gameBtn');
         this.newNoteBtn = document.getElementById('newNoteBtn');
 
         this.init();
@@ -19,21 +12,10 @@ export class Header {
     init() {
         this.setupEventListeners();
         this.setupDarkMode();
-        this.setupMobileMenu();
     }
 
     setupEventListeners() {
-        // Dark mode toggle
-        if (this.darkToggle) {
-            this.darkToggle.addEventListener('click', () => this.toggleDarkMode());
-        }
-
-        // Game button
-        if (this.gameBtn) {
-            this.gameBtn.addEventListener('click', () => this.openGame());
-        }
-
-        // Mobile menu
+        // Hamburger toggle
         if (this.hamburger) {
             this.hamburger.addEventListener('click', () => this.toggleMenu());
         }
@@ -44,110 +26,116 @@ export class Header {
             closePanelBtn.addEventListener('click', () => this.closeSidePanel());
         }
 
-        // Close menu when clicking outside
+        // Auth buttons in side panel
+        const loginBtn = document.getElementById('sidePanelLoginBtn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                this.closeSidePanel();
+                if (window.auth) window.auth.openModal('loginPopup');
+            });
+        }
+
+        const signupBtn = document.getElementById('sidePanelSignupBtn');
+        if (signupBtn) {
+            signupBtn.addEventListener('click', () => {
+                this.closeSidePanel();
+                if (window.auth) window.auth.openModal('signupPopup');
+            });
+        }
+
+        const logoutBtn = document.getElementById('sidePanelLogoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                this.closeSidePanel();
+                if (window.auth) window.auth.logout();
+            });
+        }
+
+        // Action buttons in side panel
+        const gameBtn = document.getElementById('gameBtnPanel');
+        if (gameBtn) {
+            gameBtn.addEventListener('click', () => {
+                this.closeSidePanel();
+                if (window.game) window.game.openGame();
+            });
+        }
+
+        const downloadBtn = document.getElementById('downloadBtnPanel');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                this.closeSidePanel();
+                if (window.editor) window.editor.downloadNote();
+            });
+        }
+
+        const darkToggle = document.getElementById('darkTogglePanel');
+        if (darkToggle) {
+            darkToggle.addEventListener('click', () => this.toggleDarkMode());
+        }
+
+        // New note button in side panel
+        if (this.newNoteBtn) {
+            this.newNoteBtn.addEventListener('click', () => {
+                this.closeSidePanel();
+                if (window.editor) {
+                    window.editor.newNote();
+                } else if (window.newNote) {
+                    window.newNote();
+                }
+            });
+        }
+
+        // Close panel on outside click
         document.addEventListener('click', (e) => this.handleOutsideClick(e));
     }
 
     setupDarkMode() {
+        const darkToggle = document.getElementById('darkTogglePanel');
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark');
-            if (this.darkToggle) this.darkToggle.textContent = '🌙';
+            if (darkToggle) darkToggle.textContent = '🌙 Dark Mode';
         } else {
-            if (this.darkToggle) this.darkToggle.textContent = '☀️';
+            if (darkToggle) darkToggle.textContent = '☀️ Dark Mode';
         }
     }
 
     toggleDarkMode() {
         const isDark = document.body.classList.toggle('dark');
         localStorage.setItem('darkMode', isDark);
-        if (this.darkToggle) {
-            this.darkToggle.textContent = isDark ? '🌙' : '☀️';
-        }
-    }
-
-    setupMobileMenu() {
-        // Link mobile buttons
-        this.linkMobileButtons();
-    }
-
-    linkMobileButtons() {
-        // Link new note button
-        const newNoteBtnMobile = document.getElementById('newNoteBtnMobile');
-        if (newNoteBtnMobile && this.newNoteBtn) {
-            newNoteBtnMobile.addEventListener('click', () => {
-                this.newNoteBtn.click();
-                this.toggleMenu();
-            });
-        }
-
-        // Link dark mode toggle
-        const darkToggleMobile = document.getElementById('darkToggleMobile');
-        if (darkToggleMobile && this.darkToggle) {
-            darkToggleMobile.addEventListener('click', () => {
-                this.darkToggle.click();
-            });
-        }
-
-        // Link download button
-        const downloadBtnMobile = document.getElementById('downloadBtnMobile');
-        if (downloadBtnMobile && this.downloadBtn) {
-            downloadBtnMobile.addEventListener('click', () => {
-                this.downloadBtn.click();
-                this.toggleMenu();
-            });
-        }
-
-        // Link game button
-        const gameBtnMobile = document.getElementById('gameBtnMobile');
-        if (gameBtnMobile && this.gameBtn) {
-            gameBtnMobile.addEventListener('click', () => {
-                this.openGame();
-                this.toggleMenu();
-            });
-        }
-
-
-
-        // Link logout button
-        const logoutBtnMobile = document.getElementById('logoutBtnMobile');
-        if (logoutBtnMobile) {
-            logoutBtnMobile.addEventListener('click', () => {
-                if (window.logout) window.logout();
-                this.toggleMenu();
-            });
+        const darkToggle = document.getElementById('darkTogglePanel');
+        if (darkToggle) {
+            darkToggle.textContent = isDark ? '🌙 Dark Mode' : '☀️ Dark Mode';
         }
     }
 
     toggleMenu() {
         if (!this.sidePanel) return;
-
         this.sidePanel.classList.toggle('open');
-
-        const panelButtons = document.getElementById('sidePanelButtons');
-        if (panelButtons) panelButtons.innerHTML = '';
-
-        // Populate mobile document list
-        this.populateMobileDocList();
-
-        // Link mobile buttons to their functionality
-        this.linkMobileButtons();
+        if (this.sidePanel.classList.contains('open')) {
+            this.populateMobileDocList();
+        }
     }
 
     populateMobileDocList() {
         const docList = document.getElementById('mobileDocList');
-        if (docList && window.notes) {
-            docList.innerHTML = '';
-            Object.keys(window.notes).forEach((name) => {
-                const li = document.createElement('li');
-                li.textContent = name;
-                li.classList.add('doc-item');
-                li.onclick = () => {
-                    if (window.openNote) window.openNote(name);
-                    this.closeSidePanel();
-                };
-                docList.appendChild(li);
-            });
+        if (!docList) return;
+
+        if (!window.notes || Object.keys(window.notes).length === 0) {
+            // Leave the empty state in place
+            return;
         }
+
+        docList.innerHTML = '';
+        Object.keys(window.notes).forEach((name) => {
+            const li = document.createElement('li');
+            li.textContent = name;
+            li.classList.add('doc-item');
+            li.addEventListener('click', () => {
+                this.closeSidePanel();
+                if (window.openNote) window.openNote(name);
+            });
+            docList.appendChild(li);
+        });
     }
 
     closeSidePanel() {
@@ -157,23 +145,32 @@ export class Header {
     }
 
     handleOutsideClick(e) {
-        const menu = document.getElementById('menu');
-        const hamburger = document.querySelector('.hamburger');
-
-        if ((menu && !menu.contains(e.target)) &&
-            (hamburger && !hamburger.contains(e.target))) {
-            if (menu) menu.style.display = 'none';
+        if (!this.sidePanel || !this.sidePanel.classList.contains('open')) return;
+        if (!this.sidePanel.contains(e.target) &&
+            !(this.hamburger && this.hamburger.contains(e.target))) {
+            this.closeSidePanel();
         }
     }
 
-    updateAuthState(user) {
+    updateAuthUI(user) {
+        const loggedOut = document.getElementById('sidePanelLoggedOut');
+        const loggedIn = document.getElementById('sidePanelLoggedIn');
+        const emailEl = document.getElementById('sidePanelEmail');
+
         if (user) {
-            if (this.authButtons) this.authButtons.style.display = 'none';
-            if (this.logoutSection) this.logoutSection.style.display = 'block';
+            if (loggedOut) loggedOut.style.display = 'none';
+            if (loggedIn) loggedIn.style.display = 'block';
+            if (emailEl) emailEl.textContent = user.email;
         } else {
-            if (this.authButtons) this.authButtons.style.display = 'block';
-            if (this.logoutSection) this.logoutSection.style.display = 'none';
+            if (loggedOut) loggedOut.style.display = 'block';
+            if (loggedIn) loggedIn.style.display = 'none';
+            if (emailEl) emailEl.textContent = '';
         }
+    }
+
+    // Backward-compat alias — Auth.js may call updateAuthState
+    updateAuthState(user) {
+        this.updateAuthUI(user);
     }
 
     openGame() {
@@ -181,8 +178,6 @@ export class Header {
             window.game.openGame();
         }
     }
-
-
 
     renderTabs(notes, currentNote, onSwitchNote, onCloseNote) {
         if (!this.tabsContainer) return;
@@ -214,8 +209,16 @@ export class Header {
         addBtn.className = 'tab add-btn';
         addBtn.textContent = '+';
         addBtn.onclick = () => {
-            if (this.newNoteBtn) this.newNoteBtn.click();
+            if (window.editor) {
+                window.editor.newNote();
+            } else if (window.newNote) {
+                window.newNote();
+            }
         };
         this.tabsContainer.appendChild(addBtn);
+    }
+
+    exposeToGlobal() {
+        window.header = this;
     }
 }

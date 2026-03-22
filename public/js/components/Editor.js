@@ -2,8 +2,6 @@
 export class Editor {
     constructor() {
         this.editor = document.getElementById('editor');
-        this.newNoteBtn = document.getElementById('newNoteBtn');
-        this.downloadBtn = document.getElementById('downloadBtn');
 
         this.notes = { "Note 1": "" };
         this.deletedNotes = {};
@@ -27,15 +25,7 @@ export class Editor {
             this.editor.addEventListener("input", () => this.handleEditorInput());
         }
 
-        // New note button
-        if (this.newNoteBtn) {
-            this.newNoteBtn.addEventListener('click', () => this.createNewNote());
-        }
 
-        // Download button
-        if (this.downloadBtn) {
-            this.downloadBtn.addEventListener('click', () => this.downloadNote());
-        }
     }
 
     setupMutationObserver() {
@@ -69,6 +59,10 @@ export class Editor {
         if (window.footer && this.editor) {
             window.footer.updateStatus(this.editor);
         }
+    }
+
+    newNote() {
+        this.createNewNote();
     }
 
     createNewNote() {
@@ -357,6 +351,11 @@ export class Editor {
 
     // Expose methods to global scope
     exposeToGlobal() {
+        // Expose notes object by reference proxy so Header can read it
+        Object.defineProperty(window, 'notes', {
+            get: () => this.notes,
+            configurable: true
+        });
         window.openNote = (noteName) => this.openNote(noteName);
         window.switchNote = (name) => this.switchNote(name);
         window.closeNote = (name) => this.closeNote(name);
@@ -366,5 +365,6 @@ export class Editor {
         window.saveNotes = () => this.saveNotes();
         window.loadNotes = (uid) => this.loadNotes(uid);
         window.updateStatus = () => this.updateStatus();
+        window.newNote = () => this.createNewNote();
     }
 }
