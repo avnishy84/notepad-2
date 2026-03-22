@@ -8,6 +8,7 @@ export class Editor {
         this.notes = { "Note 1": "" };
         this.deletedNotes = {};
         this.currentNote = Object.keys(this.notes)[0];
+        this.currentUser = null; // set by Auth via setUser()
 
         this.observer = null;
 
@@ -160,16 +161,15 @@ export class Editor {
     }
 
     async persistDeletion(name) {
-        if (window.auth && window.auth.currentUser && window.db) {
-            try {
-                const userDocRef = window.doc(window.db, "users", window.auth.currentUser.uid);
-                await window.setDoc(userDocRef, {
-                    notes: { [name]: window.deleteField() },
-                    deletedNotes: { [name]: { deleted: true, deletedAt: new Date().toISOString() } }
-                }, { merge: true });
-            } catch (err) {
-                console.error("Failed to persist deletion:", err);
-            }
+        if (!this.currentUser || !window.db) return;
+        try {
+            const userDocRef = window.doc(window.db, "users", this.currentUser.uid);
+            await window.setDoc(userDocRef, {
+                notes: { [name]: window.deleteField() },
+                deletedNotes: { [name]: { deleted: true, deletedAt: new Date().toISOString() } }
+            }, { merge: true });
+        } catch (err) {
+            console.error("Failed to persist deletion:", err);
         }
     }
 
@@ -268,13 +268,21 @@ export class Editor {
 
     // Save/Load methods
     async saveNotes() {
-        if (!window.auth || !window.auth.currentUser || !window.db) return;
+        if (!this.currentUser || !window.db) return;
+
+        // Filter out any Firestore metadata keys before saving
+        const notesToSave = {};
+        Object.keys(this.notes).forEach(key => {
+            if (!key.endsWith('_updateTime')) {
+                notesToSave[key] = this.notes[key];
+            }
+        });
 
         try {
-            await window.setDoc(window.doc(window.db, "users", window.auth.currentUser.uid), {
-                notes: this.notes
+            await window.setDoc(window.doc(window.db, "users", this.currentUser.uid), {
+                notes: notesToSave
             }, { merge: true });
-            console.log("Notes saved for", window.auth.currentUser.email);
+            console.log("Notes saved for", this.currentUser.email);
         } catch (err) {
             console.error("Error saving notes:", err);
         }
@@ -290,41 +298,34 @@ export class Editor {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 if (data.notes && Object.keys(data.notes).length > 0) {
-                    // Sort notes by key (alphabetically)
                     const noteNames = Object.keys(data.notes).filter(key => !key.endsWith('_updateTime'));
                     const sortedNoteNames = noteNames.sort();
 
                     const sortedNotes = {};
                     sortedNoteNames.forEach(name => {
                         sortedNotes[name] = data.notes[name];
-                        if (data.notes[name + '_updateTime']) {
-                            sortedNotes[name + '_updateTime'] = data.notes[name + '_updateTime'];
-                        }
                     });
 
                     this.notes = sortedNotes;
                     this.deletedNotes = data.deletedNotes || {};
-                    this.currentNote = sortedNoteNames[sortedNoteNames.length - 1] || "Note 1"; // Select last alphabetically
+                    this.currentNote = sortedNoteNames[sortedNoteNames.length - 1] || "Note 1";
                     if (this.editor) {
                         this.editor.innerHTML = this.notes[this.currentNote];
                     }
                     console.log("Notes loaded for", uid);
                 } else {
-                    // No notes stored → create default
                     this.notes = { "Note 1": "" };
                     this.currentNote = "Note 1";
                     await this.saveNotes();
                     console.log("New user – default note created");
                 }
             } else {
-                // First time user doc → create with default note
                 this.notes = { "Note 1": "" };
                 this.currentNote = "Note 1";
                 await this.saveNotes();
                 console.log("New user – doc created");
             }
 
-            // Update UI
             if (window.header) {
                 window.header.renderTabs(this.notes, this.currentNote,
                     (name) => this.switchNote(name),

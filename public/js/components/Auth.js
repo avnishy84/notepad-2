@@ -4,8 +4,6 @@ export class Auth {
         this.auth = null;
         this.db = null;
         this.provider = null;
-        
-        this.init();
     }
 
     async init() {
@@ -64,14 +62,12 @@ export class Auth {
 
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
-                // User is logged in
-                if (window.header) {
-                    window.header.updateAuthState(user);
-                }
+                if (window.header) window.header.updateAuthState(user);
                 console.log("User logged in:", user.email);
 
-                // Load notes for the user
+                // Store user on editor immediately so saveNotes() works
                 if (window.editor) {
+                    window.editor.currentUser = user;
                     window.editor.loadNotes(user.uid);
                 }
 
@@ -80,14 +76,11 @@ export class Auth {
                     window.readonly.refreshDocuments();
                 }
             } else {
-                // User is logged out
-                if (window.header) {
-                    window.header.updateAuthState(null);
-                }
+                if (window.header) window.header.updateAuthState(null);
                 console.log("No user logged in");
 
-                // Reset local notes when logged out
                 if (window.editor) {
+                    window.editor.currentUser = null;
                     window.editor.resetNotes();
                 }
 
@@ -126,7 +119,7 @@ export class Auth {
         const password = document.getElementById("signupPassword").value;
         
         try {
-            await createUserWithEmailAndPassword(this.auth, email, password);
+            await window.createUserWithEmailAndPassword(this.auth, email, password);
             console.log("Signed up:", email);
             this.closeModal("signupPopup");
         } catch (err) {
@@ -139,7 +132,7 @@ export class Auth {
         const password = document.getElementById("loginPassword").value;
         
         try {
-            await signInWithEmailAndPassword(this.auth, email, password);
+            await window.signInWithEmailAndPassword(this.auth, email, password);
             console.log("Logged in:", email);
             this.closeModal("loginPopup");
         } catch (err) {
@@ -149,7 +142,7 @@ export class Auth {
 
     async logout() {
         try {
-            await signOut(this.auth);
+            await window.signOut(this.auth);
         } catch (err) {
             console.error("Logout error:", err);
         }
@@ -157,10 +150,10 @@ export class Auth {
 
     async googleLogin() {
         try {
-            const result = await signInWithPopup(this.auth, this.provider);
+            const result = await window.signInWithPopup(this.auth, this.provider);
             const user = result.user;
             console.log("Google login success:", user.email);
-            this.closeModal("loginPopup"); // auto close popup
+            this.closeModal("loginPopup");
         } catch (err) {
             alert("Google login failed: " + err.message);
             console.error(err);
