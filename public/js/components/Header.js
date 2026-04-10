@@ -1,9 +1,9 @@
 // Header Component
 export class Header {
     constructor() {
-        this.tabsContainer = document.getElementById('tabs');
-        this.hamburger = document.querySelector('.hamburger');
+        this.hamburger = document.getElementById('hamburgerBtn') || document.querySelector('.hamburger');
         this.sidePanel = document.getElementById('sidePanel');
+        this.overlay = document.getElementById('sidePanelOverlay');
         this.newNoteBtn = document.getElementById('newNoteBtn');
 
         this.init();
@@ -11,7 +11,8 @@ export class Header {
 
     init() {
         this.setupEventListeners();
-        this.setupDarkMode();
+        this.syncDarkModeIcon();
+        this.updateAuthUI(null);
     }
 
     setupEventListeners() {
@@ -26,7 +27,12 @@ export class Header {
             closePanelBtn.addEventListener('click', () => this.closeSidePanel());
         }
 
-        // Auth buttons in side panel
+        // Overlay click closes panel
+        if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.closeSidePanel());
+        }
+
+        // Side panel auth buttons
         const loginBtn = document.getElementById('sidePanelLoginBtn');
         if (loginBtn) {
             loginBtn.addEventListener('click', () => {
@@ -51,7 +57,7 @@ export class Header {
             });
         }
 
-        // Action buttons in side panel
+        // Side panel action buttons
         const gameBtn = document.getElementById('gameBtnPanel');
         if (gameBtn) {
             gameBtn.addEventListener('click', () => {
@@ -73,83 +79,95 @@ export class Header {
             darkToggle.addEventListener('click', () => this.toggleDarkMode());
         }
 
-        // New note button in side panel
+        // New note button
         if (this.newNoteBtn) {
             this.newNoteBtn.addEventListener('click', () => {
                 this.closeSidePanel();
-                if (window.editor) {
-                    window.editor.newNote();
-                } else if (window.newNote) {
-                    window.newNote();
-                }
+                if (window.editor) window.editor.newNote();
+                else if (window.newNote) window.newNote();
             });
         }
-
-        // Close panel on outside click
-        document.addEventListener('click', (e) => this.handleOutsideClick(e));
     }
 
-    setupDarkMode() {
-        const darkToggle = document.getElementById('darkTogglePanel');
-        if (localStorage.getItem('darkMode') === 'true') {
+    syncDarkModeIcon() {
+        const isDark = document.body.classList.contains('dark') ||
+                       localStorage.getItem('darkMode') === 'true';
+        if (isDark && !document.body.classList.contains('dark')) {
             document.body.classList.add('dark');
-            if (darkToggle) darkToggle.textContent = '🌙 Dark Mode';
-        } else {
-            if (darkToggle) darkToggle.textContent = '☀️ Dark Mode';
         }
+        const panelBtn = document.getElementById('darkTogglePanel');
+        if (panelBtn) panelBtn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
     }
 
     toggleDarkMode() {
         const isDark = document.body.classList.toggle('dark');
         localStorage.setItem('darkMode', isDark);
-        const darkToggle = document.getElementById('darkTogglePanel');
-        if (darkToggle) {
-            darkToggle.textContent = isDark ? '🌙 Dark Mode' : '☀️ Dark Mode';
-        }
+        const panelBtn = document.getElementById('darkTogglePanel');
+        if (panelBtn) panelBtn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
     }
 
     toggleMenu() {
         if (!this.sidePanel) return;
-        this.sidePanel.classList.toggle('open');
-        if (this.sidePanel.classList.contains('open')) {
-            this.populateMobileDocList();
+        const isOpen = this.sidePanel.classList.contains('open');
+        if (isOpen) {
+            this.closeSidePanel();
+        } else {
+            this.openSidePanel();
         }
+    }
+
+    openSidePanel() {
+        if (!this.sidePanel) return;
+        this.sidePanel.classList.add('open');
+        if (this.overlay) this.overlay.classList.add('active');
+        this.populateMobileDocList();
+    }
+
+    closeSidePanel() {
+        if (this.sidePanel) this.sidePanel.classList.remove('open');
+        if (this.overlay) this.overlay.classList.remove('active');
     }
 
     populateMobileDocList() {
         const docList = document.getElementById('mobileDocList');
         if (!docList) return;
 
-        if (!window.notes || Object.keys(window.notes).length === 0) {
-            // Leave the empty state in place
+        const notes = window.notes;
+        const currentNote = window.editor ? window.editor.currentNote : null;
+
+        if (!notes || Object.keys(notes).length === 0) {
+            docList.innerHTML = '<li class="doc-empty-state">No documents yet</li>';
             return;
         }
 
         docList.innerHTML = '';
-        Object.keys(window.notes).forEach((name) => {
+        Object.keys(notes).forEach((name) => {
             const li = document.createElement('li');
-            li.textContent = name;
             li.classList.add('doc-item');
-            li.addEventListener('click', () => {
+            if (name === currentNote) li.classList.add('doc-item-active');
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+            nameSpan.style.flex = '1';
+            nameSpan.addEventListener('click', () => {
                 this.closeSidePanel();
                 if (window.openNote) window.openNote(name);
             });
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕';
+            closeBtn.className = 'doc-item-close';
+            closeBtn.title = 'Delete note';
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (window.editor) window.editor.closeNote(name);
+                this.populateMobileDocList();
+            });
+
+            li.appendChild(nameSpan);
+            li.appendChild(closeBtn);
             docList.appendChild(li);
         });
-    }
-
-    closeSidePanel() {
-        if (this.sidePanel) {
-            this.sidePanel.classList.remove('open');
-        }
-    }
-
-    handleOutsideClick(e) {
-        if (!this.sidePanel || !this.sidePanel.classList.contains('open')) return;
-        if (!this.sidePanel.contains(e.target) &&
-            !(this.hamburger && this.hamburger.contains(e.target))) {
-            this.closeSidePanel();
-        }
     }
 
     updateAuthUI(user) {
@@ -159,16 +177,16 @@ export class Header {
 
         if (user) {
             if (loggedOut) loggedOut.style.display = 'none';
-            if (loggedIn) loggedIn.style.display = 'block';
+            if (loggedIn) loggedIn.style.display = 'flex';
             if (emailEl) emailEl.textContent = user.email;
         } else {
-            if (loggedOut) loggedOut.style.display = 'block';
+            if (loggedOut) loggedOut.style.display = 'flex';
             if (loggedIn) loggedIn.style.display = 'none';
             if (emailEl) emailEl.textContent = '';
         }
     }
 
-    // Backward-compat alias — Auth.js may call updateAuthState
+    // Backward-compat alias
     updateAuthState(user) {
         this.updateAuthUI(user);
     }
@@ -179,46 +197,15 @@ export class Header {
         }
     }
 
-    renderTabs(notes, currentNote, onSwitchNote, onCloseNote) {
-        if (!this.tabsContainer) return;
-
-        this.tabsContainer.innerHTML = '';
-
-        Object.keys(notes).forEach(name => {
-            const tab = document.createElement('div');
-            tab.className = 'tab' + (name === currentNote ? ' active' : '');
-
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = name;
-            nameSpan.onclick = () => onSwitchNote(name);
-            tab.appendChild(nameSpan);
-
-            const closeSpan = document.createElement('span');
-            closeSpan.className = 'close-btn cursor-pointer subscript';
-            closeSpan.textContent = 'X';
-            closeSpan.onclick = (e) => {
-                e.stopPropagation();
-                onCloseNote(name);
-            };
-            tab.appendChild(closeSpan);
-
-            this.tabsContainer.appendChild(tab);
-        });
-
-        const addBtn = document.createElement('button');
-        addBtn.className = 'tab add-btn';
-        addBtn.textContent = '+';
-        addBtn.onclick = () => {
-            if (window.editor) {
-                window.editor.newNote();
-            } else if (window.newNote) {
-                window.newNote();
-            }
-        };
-        this.tabsContainer.appendChild(addBtn);
+    // Notes are shown in the side panel doc list — no tab bar needed
+    renderTabs() {
+        // Refresh the side panel doc list whenever notes change
+        this.populateMobileDocList();
     }
 
     exposeToGlobal() {
         window.header = this;
+        // Expose toggleMenu for any legacy callers
+        window.toggleMenu = () => this.toggleMenu();
     }
 }

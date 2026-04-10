@@ -19,7 +19,9 @@ export class Auth {
                 createUserWithEmailAndPassword,
                 signInWithEmailAndPassword,
                 signOut,
-                onAuthStateChanged
+                onAuthStateChanged,
+                GoogleAuthProvider,
+                signInWithPopup
             } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js");
             const {
                 doc,
@@ -28,15 +30,20 @@ export class Auth {
                 serverTimestamp,
                 deleteField
             } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js");
-            const { GoogleAuthProvider, signInWithPopup } = 
-                await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js");
 
             this.auth = auth;
             this.db = db;
             this.provider = new GoogleAuthProvider();
 
-            // Expose to global scope for other components
-            window.auth = auth;
+            // Store auth functions on instance for use in methods
+            this._createUser = createUserWithEmailAndPassword;
+            this._signIn = signInWithEmailAndPassword;
+            this._signOut = signOut;
+            this._onAuthStateChanged = onAuthStateChanged;
+            this._signInWithPopup = signInWithPopup;
+
+            // Expose Firebase internals to global scope (NOT the Auth class instance)
+            window.firebaseAuth = auth;
             window.db = db;
             window.doc = doc;
             window.getDoc = getDoc;
@@ -58,9 +65,9 @@ export class Auth {
     }
 
     setupAuthStateListener() {
-        if (!this.auth) return;
+        if (!this.auth || !this._onAuthStateChanged) return;
 
-        onAuthStateChanged(this.auth, (user) => {
+        this._onAuthStateChanged(this.auth, (user) => {
             if (user) {
                 if (window.header) window.header.updateAuthState(user);
                 console.log("User logged in:", user.email);
@@ -109,7 +116,7 @@ export class Auth {
         const password = document.getElementById("signupPassword").value;
         
         try {
-            await window.createUserWithEmailAndPassword(this.auth, email, password);
+            await this._createUser(this.auth, email, password);
             console.log("Signed up:", email);
             this.closeModal("signupPopup");
         } catch (err) {
@@ -122,7 +129,7 @@ export class Auth {
         const password = document.getElementById("loginPassword").value;
         
         try {
-            await window.signInWithEmailAndPassword(this.auth, email, password);
+            await this._signIn(this.auth, email, password);
             console.log("Logged in:", email);
             this.closeModal("loginPopup");
         } catch (err) {
@@ -132,7 +139,7 @@ export class Auth {
 
     async logout() {
         try {
-            await window.signOut(this.auth);
+            await this._signOut(this.auth);
         } catch (err) {
             console.error("Logout error:", err);
         }
@@ -140,7 +147,7 @@ export class Auth {
 
     async googleLogin() {
         try {
-            const result = await window.signInWithPopup(this.auth, this.provider);
+            const result = await this._signInWithPopup(this.auth, this.provider);
             const user = result.user;
             console.log("Google login success:", user.email);
             this.closeModal("loginPopup");

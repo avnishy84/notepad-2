@@ -9,73 +9,66 @@
   <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Apply dark mode before render to prevent flash -->
+  <script>if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark-init');</script>
 </head>
 
 <body>
   <!-- Header with tabs and buttons -->
   <header>
     <div class="header-top">
-      <button class="hamburger" onclick="toggleMenu()">☰</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">☰</button>
     </div>
-
-    <div class="header-tabs-row">
-      <div id="tabs"></div>
-    </div>
-    <!-- Side Panel (Mobile Drawer) -->
-    <div id="sidePanel" class="side-panel">
-      <div class="side-panel-content">
-        <!-- Close button -->
-        <button id="closePanelBtn" class="close-panel">✖</button>
-
-        <!-- Auth section (2.1) -->
-        <div id="sidePanelAuth" class="panel-section">
-          <div id="sidePanelLoggedOut">
-            <button id="sidePanelLoginBtn">Login</button>
-            <button id="sidePanelSignupBtn">Signup</button>
-          </div>
-          <div id="sidePanelLoggedIn" style="display:none;">
-            <span id="sidePanelEmail" class="panel-email"></span>
-            <button id="sidePanelLogoutBtn">Logout</button>
-          </div>
-        </div>
-
-        <!-- Nav links section (2.2) -->
-        <div class="panel-section">
-          <span class="panel-section-label">Navigation</span>
-          <nav class="panel-nav">
-            <a href="about.html" class="panel-nav-link">About</a>
-            <a href="settings.html" class="panel-nav-link">Settings</a>
-          </nav>
-        </div>
-
-        <!-- Action buttons section (2.3) -->
-        <div class="panel-section">
-          <span class="panel-section-label">Actions</span>
-          <div class="panel-actions">
-            <button id="gameBtnPanel">🎮 Game</button>
-            <button id="darkTogglePanel">🌙 Dark Mode</button>
-            <button id="downloadBtnPanel">⬇️ Download</button>
-          </div>
-        </div>
-
-        <!-- Document list section (2.4) -->
-        <div class="panel-section">
-          <span class="panel-section-label">Your Documents</span>
-          <button id="newNoteBtn" class="panel-new-note-btn">+ New Note</button>
-          <ul id="mobileDocList" class="doc-list">
-            <li class="doc-empty-state">No documents yet</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
   </header>
 
-  <!-- Format Toggle Button -->
-  <button id="formatToggle" class="format-toggle-btn" title="Show/Hide Formatting Options">
-    <i class="fas fa-magic"></i>
-    <span class="format-toggle-text">Format</span>
-  </button>
+  <!-- Side Panel — must be a direct child of body, not inside header -->
+  <div id="sidePanelOverlay" class="side-panel-overlay"></div>
+  <div id="sidePanel" class="side-panel">
+    <div class="side-panel-content">
+      <!-- Close button -->
+      <button id="closePanelBtn" class="close-panel">✖</button>
+
+      <!-- Auth section -->
+      <div id="sidePanelAuth" class="panel-section">
+        <div id="sidePanelLoggedOut">
+          <button id="sidePanelLoginBtn">Login</button>
+          <button id="sidePanelSignupBtn">Signup</button>
+        </div>
+        <div id="sidePanelLoggedIn" style="display:none;">
+          <span id="sidePanelEmail" class="panel-email"></span>
+          <button id="sidePanelLogoutBtn">Logout</button>
+        </div>
+      </div>
+
+      <!-- Nav links section -->
+      <div class="panel-section">
+        <span class="panel-section-label">Navigation</span>
+        <nav class="panel-nav">
+          <a href="about.html" class="panel-nav-link">About</a>
+          <a href="settings.html" class="panel-nav-link">Settings</a>
+        </nav>
+      </div>
+
+      <!-- Action buttons section -->
+      <div class="panel-section">
+        <span class="panel-section-label">Actions</span>
+        <div class="panel-actions">
+          <button id="gameBtnPanel">🎮 Game</button>
+          <button id="darkTogglePanel">🌙 Dark Mode</button>
+          <button id="downloadBtnPanel">⬇️ Download</button>
+        </div>
+      </div>
+
+      <!-- Document list section -->
+      <div class="panel-section">
+        <span class="panel-section-label">Your Documents</span>
+        <button id="newNoteBtn" class="panel-new-note-btn">+ New Note</button>
+        <ul id="mobileDocList" class="doc-list">
+          <li class="doc-empty-state">No documents yet</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- Toolbar -->
   <main class="main-content">

@@ -403,19 +403,11 @@ export class Game {
             case 'right': head.x++; break;
         }
 
-        // Check collision with walls (unless ghost mode is active)
-        if (!this.activePowerUps.ghost) {
-            if (head.x < 0 || head.x >= this.gridSize || head.y < 0 || head.y >= this.gridSize) {
-                this.gameOver();
-                return;
-            }
-        } else {
-            // Wrap around in ghost mode
-            if (head.x < 0) head.x = this.gridSize - 1;
-            if (head.x >= this.gridSize) head.x = 0;
-            if (head.y < 0) head.y = this.gridSize - 1;
-            if (head.y >= this.gridSize) head.y = 0;
-        }
+        // Always wrap around walls (portal/tunnel mode)
+        if (head.x < 0) head.x = this.gridSize - 1;
+        if (head.x >= this.gridSize) head.x = 0;
+        if (head.y < 0) head.y = this.gridSize - 1;
+        if (head.y >= this.gridSize) head.y = 0;
 
         // Check collision with self (unless ghost mode is active)
         if (!this.activePowerUps.ghost && this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {

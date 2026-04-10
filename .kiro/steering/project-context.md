@@ -95,6 +95,10 @@ Components talk via `window.*` globals:
 - `window.toolbar` → Toolbar instance
 - `window.game` → Game instance
 - `window.settings` → Settings instance
+- `window.notes` → live getter for `editor.notes` (used by Header to populate doc list)
+- `window.toggleMenu()` → opens/closes the side panel (called by hamburger inline onclick)
+- `window.openNote(name)` → switches to a note (called by side panel doc list items)
+- `window.newNote()` → creates a new note (alias for `editor.createNewNote()`)
 - Firebase methods: `window.doc`, `window.getDoc`, `window.setDoc`, `window.serverTimestamp`, `window.deleteField`, `window.onAuthStateChanged`
 
 ---
@@ -115,14 +119,22 @@ Components talk via `window.*` globals:
 - `saveNotes()`: merges to Firestore on every input event
 - `resetNotes()`: resets to `{ "Note 1": "" }` on logout
 - Deletion: uses `deleteField()` to remove from Firestore, tracks in `deletedNotes`
-- Download: saves current note as `.html` file
+- `downloadNote()`: saves current note as `.html` file (called by `#downloadBtnPanel` via Header.js)
+- `newNote()` / `createNewNote()`: creates a timestamped note; exposed as `window.newNote` and `window.editor.newNote()`
+- `window.notes` exposed as a live getter so Header.js can read the notes object
 - Confirm dialog: dynamically creates a modal DOM element
+- No longer wires `#newNoteBtn` or `#downloadBtn` directly — those are handled by Header.js
 
 ### Header.js
-- Manages auth state UI (show/hide login buttons)
-- `renderTabs(notes, currentNote, onSwitch, onClose)`: called by Editor
-- Mobile side panel: slide-out drawer with doc list
-- Dark mode: persisted in `localStorage('darkMode')`
+- Header-top contains only the hamburger button (☰) — all other actions moved to the side panel
+- Side panel (`#sidePanel`) is the single hub for: auth, navigation, actions, and document list
+- Side panel sections (in order): close button, auth, nav links, actions, document list
+- `updateAuthUI(user)` / `updateAuthState(user)` (alias): shows login/signup or email+logout in `#sidePanelAuth`
+- `renderTabs(notes, currentNote, onSwitch, onClose)`: called by Editor to render tab row
+- `populateMobileDocList()`: populates `#mobileDocList` from `window.notes` when panel opens
+- Dark mode: persisted in `localStorage('darkMode')`, icon synced on `#darkTogglePanel`
+- `window.toggleMenu()` exposed globally for the inline `onclick` on the hamburger button
+- Outside-click closes the panel; `#closePanelBtn` also closes it
 
 ### Toolbar.js
 - Rich text via `document.execCommand()`
@@ -206,3 +218,4 @@ Firebase CLI required globally: `npm install -g firebase-tools`
 - Removed read-only mode entirely (Readonly.js, readonly.html, all nav links)
 - Fixed Settings page auth display — added `onAuthStateChanged` listener so email shows correctly when logged in
 - Git local config set to `avnishy84` / `avnishy84@gmail.com`
+- **Hamburger side panel consolidation**: header-top stripped to hamburger only; side panel rebuilt as single hub with auth, nav, actions, and doc list sections; Header.js fully rewired to panel buttons; Editor.js cleaned of stale DOM refs
