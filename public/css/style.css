@@ -1076,13 +1076,19 @@ body.dark .game-instructions {
   width: 280px;
   max-width: 85vw;
   height: 100%;
-  background: var(--bg);
-  border-right: 1px solid var(--header-btn-border);
+  background: rgba(255, 255, 255, 0.97);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
   transform: translateX(-100%);
   transition: transform 0.3s ease-in-out;
   z-index: 2000;
   overflow-y: auto;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.18);
+}
+
+body.dark .side-panel {
+  background: rgba(18, 18, 22, 0.98);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.5);
 }
 
 /* When open */
