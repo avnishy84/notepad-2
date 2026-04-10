@@ -154,9 +154,10 @@ export class Settings {
     }
 
     updateUserInfo() {
-        if (window.auth && window.auth.currentUser) {
+        const currentUser = window.firebaseAuth && window.firebaseAuth.currentUser;
+        if (currentUser) {
             if (this.userEmail) {
-                this.userEmail.textContent = window.auth.currentUser.email;
+                this.userEmail.textContent = currentUser.email;
             }
         } else {
             if (this.userEmail) {
@@ -168,8 +169,8 @@ export class Settings {
     setupAuthListener() {
         // Wait for auth to be available and set up listener
         const checkAuth = () => {
-            if (window.onAuthStateChanged && window.auth) {
-                window.onAuthStateChanged(window.auth, (user) => {
+            if (window.onAuthStateChanged && window.firebaseAuth) {
+                window.onAuthStateChanged(window.firebaseAuth, (user) => {
                     if (user) {
                         if (this.userEmail) {
                             this.userEmail.textContent = user.email;
@@ -189,31 +190,29 @@ export class Settings {
     }
 
     async exportAllData() {
-        if (!window.auth || !window.auth.currentUser) {
+        const currentUser = window.firebaseAuth && window.firebaseAuth.currentUser;
+        if (!currentUser) {
             alert('You must be logged in to export data.');
             return;
         }
 
         try {
-            // Get user data from Firestore
-            const userDocRef = window.doc(window.db, "users", window.auth.currentUser.uid);
+            const userDocRef = window.doc(window.db, "users", currentUser.uid);
             const docSnap = await window.getDoc(userDocRef);
             
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 
-                // Create export object
                 const exportData = {
                     user: {
-                        email: window.auth.currentUser.email,
-                        uid: window.auth.currentUser.uid
+                        email: currentUser.email,
+                        uid: currentUser.uid
                     },
                     notes: data.notes || {},
                     settings: this.getStoredSettings(),
                     exportDate: new Date().toISOString()
                 };
 
-                // Create and download file
                 const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
                     type: 'application/json' 
                 });
@@ -233,7 +232,8 @@ export class Settings {
     }
 
     async deleteAccount() {
-        if (!window.auth || !window.auth.currentUser) {
+        const currentUser = window.firebaseAuth && window.firebaseAuth.currentUser;
+        if (!currentUser) {
             alert('You must be logged in to delete your account.');
             return;
         }
@@ -245,20 +245,16 @@ export class Settings {
         if (!confirmed) return;
 
         try {
-            // Delete user data from Firestore
-            const userDocRef = window.doc(window.db, "users", window.auth.currentUser.uid);
+            const userDocRef = window.doc(window.db, "users", currentUser.uid);
             await window.setDoc(userDocRef, {
                 notes: {},
                 deletedNotes: {},
                 deletedAt: window.serverTimestamp()
             });
 
-            // Delete the user account
-            await window.auth.currentUser.delete();
+            await currentUser.delete();
 
             alert('Account deleted successfully.');
-            
-            // Redirect to home page
             window.location.href = '/';
         } catch (error) {
             console.error('Delete account error:', error);

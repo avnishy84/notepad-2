@@ -10,9 +10,9 @@ export class About {
 
     init() {
         this.setupContactForm();
-        this.setupTechStackCopy();
         this.setupFAQ();
         this.setupShareButtons();
+        this.setupBackToTop();
     }
 
     setupContactForm() {
@@ -29,18 +29,13 @@ export class About {
         const email = document.getElementById('email').value;
         const message = document.getElementById('message').value;
 
-        if (window.auth && window.auth.currentUser && window.db) {
+        const currentUser = window.firebaseAuth && window.firebaseAuth.currentUser;
+        if (currentUser && window.db) {
             try {
-                const userDocRef = window.doc(window.db, "users", window.auth.currentUser.uid);
+                const userDocRef = window.doc(window.db, "users", currentUser.uid);
                 await window.setDoc(userDocRef, {
-                    contact: {
-                        name: name,
-                        email: email,
-                        message: message,
-                        timestamp: window.serverTimestamp()
-                    }
+                    contact: { name, email, message, timestamp: window.serverTimestamp() }
                 }, { merge: true });
-                
                 alert('Your message has been sent!');
                 this.contactForm.reset();
             } catch (err) {
@@ -84,8 +79,19 @@ export class About {
     }
 
     setupShareButtons() {
-        // Share buttons are handled by inline onclick handlers
-        // These methods are exposed to global scope
+        // Share methods exposed to global scope via exposeToGlobal
+    }
+
+    setupBackToTop() {
+        const btn = document.getElementById('backToTop');
+        if (!btn) return;
+        window.addEventListener('scroll', () => {
+            btn.classList.toggle('show', window.scrollY > 300);
+        });
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
 
     shareOnTwitter() {

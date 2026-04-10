@@ -1,7 +1,6 @@
 // Toolbar Component
 export class Toolbar {
     constructor() {
-        this.formatToggle = document.getElementById('formatToggle');
         this.desktopToolbar = document.getElementById('desktopToolbar');
         this.mobileToolbar = document.getElementById('mobileToolbar');
         this.mobileMorePopup = document.getElementById('mobileMorePopup');
@@ -20,9 +19,6 @@ export class Toolbar {
 
         this.savedSelectionRange = null;
         this.isMobile = window.innerWidth <= 768;
-        this.toolbarVisible = false;
-        this.formatButtonVisible = false;
-        this.hideTimeout = null;
 
         this.init();
     }
@@ -37,8 +33,6 @@ export class Toolbar {
         this.loadCustomShortcuts();
         this.setupCustomShortcutListener();
         this.setupKeyboardShortcuts();
-        this.setupFormatToggle();
-        this.setupEditorFocus();
         this.setupMobilePopup();
         this.setupResizeListener();
         this.setupTouchInteractions();
@@ -411,141 +405,6 @@ export class Toolbar {
     }
 
     // Format toggle functionality
-    setupFormatToggle() {
-        if (this.formatToggle) {
-            this.formatToggle.addEventListener('click', () => {
-                this.toggleToolbar();
-            });
-        }
-    }
-
-    // Editor focus and selection handling
-    setupEditorFocus() {
-        if (!this.editor) return;
-
-        // Show format button when editor is focused or text is selected
-        this.editor.addEventListener('focus', () => {
-            this.showFormatButton();
-        });
-
-        this.editor.addEventListener('blur', () => {
-            // Hide format button after a delay when editor loses focus
-            this.scheduleHideFormatButton();
-        });
-
-        // Show format button when text is selected
-        document.addEventListener('selectionchange', () => {
-            const selection = window.getSelection();
-            if (selection && selection.rangeCount > 0) {
-                const range = selection.getRangeAt(0);
-                if (this.editor && this.editor.contains(range.startContainer)) {
-                    this.showFormatButton();
-                } else {
-                    this.scheduleHideFormatButton();
-                }
-            }
-        });
-
-        // Show format button on input/typing
-        this.editor.addEventListener('input', () => {
-            this.showFormatButton();
-        });
-
-        // Show format button on mouse events in editor
-        this.editor.addEventListener('mouseup', () => {
-            this.showFormatButton();
-        });
-
-        this.editor.addEventListener('keyup', () => {
-            this.showFormatButton();
-        });
-
-        // Show format button on hover
-        this.editor.addEventListener('mouseenter', () => {
-            this.showFormatButton();
-        });
-
-        this.editor.addEventListener('mouseleave', () => {
-            // Only schedule hide if not focused and no text selected
-            if (document.activeElement !== this.editor) {
-                this.scheduleHideFormatButton();
-            }
-        });
-    }
-
-    showFormatButton() {
-        if (this.formatToggle && !this.formatButtonVisible) {
-            this.formatButtonVisible = true;
-            this.formatToggle.classList.add('show');
-            
-            // Clear any pending hide timeout
-            if (this.hideTimeout) {
-                clearTimeout(this.hideTimeout);
-                this.hideTimeout = null;
-            }
-        }
-    }
-
-    scheduleHideFormatButton() {
-        if (this.hideTimeout) {
-            clearTimeout(this.hideTimeout);
-        }
-        
-        this.hideTimeout = setTimeout(() => {
-            this.hideFormatButton();
-        }, 2000); // Hide after 2 seconds of inactivity
-    }
-
-    hideFormatButton() {
-        if (this.formatToggle && this.formatButtonVisible && !this.toolbarVisible) {
-            this.formatButtonVisible = false;
-            this.formatToggle.classList.remove('show');
-        }
-    }
-
-    toggleToolbar() {
-        this.toolbarVisible = !this.toolbarVisible;
-        
-        if (this.isMobile) {
-            // Mobile: toggle floating toolbar
-            if (this.mobileToolbar) {
-                this.mobileToolbar.classList.toggle('show', this.toolbarVisible);
-                this.mobileToolbar.classList.toggle('hidden', !this.toolbarVisible);
-            }
-            
-            // Add/remove padding to main content
-            if (this.mainContent) {
-                this.mainContent.classList.toggle('toolbar-visible', this.toolbarVisible);
-            }
-        } else {
-            // Desktop: toggle top toolbar
-            if (this.desktopToolbar) {
-                this.desktopToolbar.classList.toggle('show', this.toolbarVisible);
-                this.desktopToolbar.classList.toggle('hidden', !this.toolbarVisible);
-            }
-        }
-        
-        // Keep format button visible when toolbar is open
-        if (this.toolbarVisible) {
-            this.showFormatButton();
-        } else {
-            // Schedule hide when toolbar is closed
-            this.scheduleHideFormatButton();
-        }
-        
-        // Update toggle button text
-        this.updateToggleButtonText();
-    }
-
-    updateToggleButtonText() {
-        if (this.formatToggle) {
-            const toggleText = this.formatToggle.querySelector('.format-toggle-text');
-            if (toggleText) {
-                toggleText.textContent = this.toolbarVisible ? 'Hide' : 'Format';
-            }
-        }
-    }
-
     // Mobile functionality
     setupMobilePopup() {
         if (this.moreBtn && this.mobileMorePopup) {
@@ -576,43 +435,12 @@ export class Toolbar {
         window.addEventListener('resize', () => {
             const wasMobile = this.isMobile;
             this.isMobile = window.innerWidth <= 768;
-            
+
             // If switching from mobile to desktop, close mobile popup
             if (wasMobile && !this.isMobile && this.mobileMorePopup) {
                 this.closeMobilePopup();
             }
-            
-            // Update toolbar visibility based on current state
-            if (this.toolbarVisible) {
-                this.updateToolbarVisibility();
-            }
         });
-    }
-
-    updateToolbarVisibility() {
-        if (this.isMobile) {
-            // Hide desktop toolbar
-            if (this.desktopToolbar) {
-                this.desktopToolbar.classList.add('hidden');
-                this.desktopToolbar.classList.remove('show');
-            }
-            // Show mobile toolbar if visible
-            if (this.mobileToolbar && this.toolbarVisible) {
-                this.mobileToolbar.classList.add('show');
-                this.mobileToolbar.classList.remove('hidden');
-            }
-        } else {
-            // Hide mobile toolbar
-            if (this.mobileToolbar) {
-                this.mobileToolbar.classList.add('hidden');
-                this.mobileToolbar.classList.remove('show');
-            }
-            // Show desktop toolbar if visible
-            if (this.desktopToolbar && this.toolbarVisible) {
-                this.desktopToolbar.classList.add('show');
-                this.desktopToolbar.classList.remove('hidden');
-            }
-        }
     }
 
     toggleMobilePopup() {
